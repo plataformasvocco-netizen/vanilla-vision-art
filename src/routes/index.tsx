@@ -1,26 +1,896 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect } from "react";
+
+const STYLES = `
+  :root{
+    --petroleo:#136E8A;
+    --petroleo-dark:#0F5870;
+    --petroleo-light:#1B8AAB;
+    --accent:#D2AC67;
+    --accent-dark:#B89556;
+    --white:#FFFFFF;
+    --bg:#FFFFFF;
+    --bg-alt:#FAF8F2;
+    --bg-dark:#091E2D;
+    --surface-dark:#1A2F45;
+    --border:#E8E4DA;
+    --border-strong:#D6CFC0;
+    --border-dark:rgba(255,255,255,.10);
+    --text:#091E2D;
+    --text-muted:#4A5A6E;
+    --text-on-dark:#C7D2DE;
+    --text-on-dark-soft:#8A98AB;
+    --radius-sm:8px;
+    --radius:14px;
+    --radius-lg:22px;
+    --shadow-sm:0 1px 2px rgba(9,30,45,.06), 0 1px 1px rgba(9,30,45,.04);
+    --shadow:0 12px 30px -12px rgba(9,30,45,.18), 0 4px 10px -4px rgba(9,30,45,.08);
+    --shadow-lg:0 30px 60px -20px rgba(9,30,45,.30);
+    --ease:cubic-bezier(.2,.7,.1,1);
+    --container:1200px;
+  }
+  .gisa,.gisa *,.gisa *::before,.gisa *::after{box-sizing:border-box}
+  .gisa{
+    font-family:"Manrope", system-ui, -apple-system, Segoe UI, sans-serif;
+    font-size:17px;line-height:1.55;color:var(--text);background:var(--bg);
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  .gisa img{max-width:100%;display:block}
+  .gisa a{color:inherit;text-decoration:none}
+  .gisa button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+  .gisa :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+
+  .gisa .container{max-width:var(--container);margin-inline:auto;padding-inline:24px}
+  .gisa section{padding:96px 0;position:relative}
+  @media (max-width:720px){.gisa section{padding:64px 0}}
+
+  .gisa .eyebrow{
+    font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+    font-weight:700;color:var(--petroleo);
+    display:inline-flex;align-items:center;gap:10px;
+  }
+  .gisa .eyebrow::before{content:"";width:24px;height:1px;background:var(--accent)}
+
+  .gisa h1,.gisa h2,.gisa h3,.gisa h4{font-family:"Fraunces", Georgia, serif;font-weight:600;color:var(--text);margin:0;letter-spacing:-.01em;text-wrap:balance}
+  .gisa h1{font-size:clamp(40px,5.8vw,72px);font-variation-settings:"opsz" 144;line-height:1.04;letter-spacing:-.02em}
+  .gisa h2{font-size:clamp(30px,3.8vw,46px);line-height:1.1;font-variation-settings:"opsz" 96}
+  .gisa h3{font-size:clamp(22px,2.2vw,28px);line-height:1.2;font-variation-settings:"opsz" 48}
+  .gisa p{margin:0}
+  .gisa .lead{font-size:clamp(17px,1.4vw,19px);color:var(--text-muted);line-height:1.6;text-wrap:pretty}
+
+  .gisa .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:10px;
+    padding:14px 22px;border-radius:999px;font-weight:700;font-size:15px;
+    transition:transform .25s var(--ease), background-color .2s var(--ease), color .2s var(--ease), box-shadow .25s var(--ease);
+    will-change:transform;white-space:nowrap;
+  }
+  .gisa .btn-primary{background:var(--accent);color:var(--text);box-shadow:var(--shadow)}
+  .gisa .btn-primary:hover{background:var(--accent-dark);transform:translateY(-1px);box-shadow:var(--shadow-lg)}
+  .gisa .btn-primary:active{transform:translateY(0)}
+  .gisa .btn-ghost{color:var(--text);background:transparent}
+  .gisa .btn-ghost:hover{background:var(--bg-alt)}
+  .gisa .btn-lg{padding:18px 28px;font-size:16px}
+
+  .gisa .micro{margin-top:12px;font-size:13.5px;color:var(--text-muted)}
+
+  .gisa .nav{
+    position:sticky;top:0;z-index:50;
+    backdrop-filter:saturate(1.4) blur(0);
+    background:rgba(255,255,255,.0);
+    transition:background-color .3s var(--ease), backdrop-filter .3s var(--ease), box-shadow .3s var(--ease), border-color .3s var(--ease);
+    border-bottom:1px solid transparent;
+  }
+  .gisa .nav.scrolled{
+    background:rgba(255,255,255,.82);
+    backdrop-filter:saturate(1.4) blur(14px);
+    box-shadow:0 6px 24px -18px rgba(9,30,45,.35);
+    border-bottom-color:var(--border);
+  }
+  .gisa .nav-inner{display:flex;align-items:center;justify-content:space-between;height:72px;gap:24px}
+  .gisa .logo{font-family:"Fraunces",serif;font-weight:700;font-size:26px;letter-spacing:-.02em;color:var(--text)}
+  .gisa .logo .dot{color:var(--accent)}
+  .gisa .nav-links{display:flex;gap:6px;align-items:center}
+  .gisa .nav-links a{
+    padding:10px 14px;border-radius:999px;font-weight:500;font-size:14.5px;color:var(--text-muted);
+    transition:color .2s var(--ease), background-color .2s var(--ease);
+  }
+  .gisa .nav-links a:hover{color:var(--text);background:var(--bg-alt)}
+  .gisa .nav-cta{display:flex;align-items:center;gap:8px}
+  .gisa .menu-btn{display:none;padding:10px;border-radius:10px}
+  .gisa .menu-btn:hover{background:var(--bg-alt)}
+  @media (max-width:900px){
+    .gisa .nav-links{
+      position:absolute;top:72px;left:0;right:0;
+      flex-direction:column;align-items:stretch;gap:0;padding:8px 16px 16px;
+      background:#fff;border-bottom:1px solid var(--border);
+      transform:translateY(-10px);opacity:0;pointer-events:none;transition:opacity .2s var(--ease), transform .2s var(--ease);
+    }
+    .gisa .nav-links.open{opacity:1;transform:translateY(0);pointer-events:auto}
+    .gisa .nav-links a{padding:14px 12px;border-radius:10px}
+    .gisa .menu-btn{display:inline-flex}
+    .gisa .nav-cta .btn{display:none}
+  }
+
+  .gisa .hero{padding-top:48px;padding-bottom:80px;overflow:hidden;position:relative;isolation:isolate}
+  .gisa .hero::before{
+    content:"";position:absolute;inset:-10% -10% auto -10%;height:90%;z-index:-2;
+    background:
+      radial-gradient(60% 50% at 20% 10%, rgba(210,172,103,.18), transparent 70%),
+      radial-gradient(50% 45% at 90% 20%, rgba(19,110,138,.18), transparent 70%);
+  }
+  .gisa .hero::after{
+    content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+    background-image:
+      linear-gradient(to right, rgba(9,30,45,.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(9,30,45,.05) 1px, transparent 1px);
+    background-size:64px 64px;
+    -webkit-mask-image:radial-gradient(ellipse at 50% 30%, #000 30%, transparent 75%);
+            mask-image:radial-gradient(ellipse at 50% 30%, #000 30%, transparent 75%);
+  }
+  .gisa .grain{position:absolute;inset:0;z-index:-1;opacity:.5;pointer-events:none;mix-blend-mode:multiply}
+  .gisa .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:64px;align-items:center}
+  @media (max-width:900px){.gisa .hero-grid{grid-template-columns:1fr;gap:40px}}
+  .gisa .hero-text > *{opacity:0;transform:translateY(14px);animation:gisaRise .8s var(--ease) forwards}
+  .gisa .hero-text .eyebrow{animation-delay:.05s}
+  .gisa .hero-text h1{animation-delay:.13s;margin-top:14px}
+  .gisa .hero-text .lead{animation-delay:.21s;margin-top:18px;max-width:56ch}
+  .gisa .hero-text .cta-row{animation-delay:.29s;margin-top:28px;display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+  .gisa .hero-text .benefits{animation-delay:.37s;margin-top:36px}
+  .gisa .hero-photo{opacity:0;transform:translateY(14px);animation:gisaRise .9s var(--ease) .25s forwards;position:relative}
+  .gisa .hero-photo .frame{
+    aspect-ratio:4/5;border-radius:var(--radius-lg);overflow:hidden;position:relative;
+    background:linear-gradient(160deg,#0F5870,#091E2D 70%);
+    box-shadow:var(--shadow-lg);
+  }
+  .gisa .hero-photo .frame::after{
+    content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(120% 60% at 20% 0%, rgba(210,172,103,.25), transparent 60%),
+      radial-gradient(80% 50% at 100% 100%, rgba(27,138,171,.35), transparent 60%);
+  }
+  .gisa .hero-photo .ph-label{
+    position:absolute;left:18px;bottom:18px;z-index:2;
+    color:rgba(255,255,255,.78);font-size:12px;letter-spacing:.05em;
+    background:rgba(9,30,45,.45);padding:8px 12px;border-radius:999px;backdrop-filter:blur(6px);
+  }
+  .gisa .hero-photo .badge{
+    position:absolute;top:24px;right:-12px;z-index:3;
+    background:#fff;border:1px solid var(--border);box-shadow:var(--shadow);
+    padding:14px 18px;border-radius:14px;display:flex;align-items:center;gap:12px;
+  }
+  .gisa .hero-photo .badge .num{font-family:"Fraunces",serif;font-size:28px;font-weight:700;color:var(--petroleo)}
+  .gisa .hero-photo .badge .lab{font-size:12px;color:var(--text-muted);line-height:1.2;max-width:120px}
+
+  .gisa .benefits{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center;font-size:14.5px;color:var(--text-muted);font-weight:600;letter-spacing:.02em}
+  .gisa .benefits span{display:inline-flex;align-items:center;gap:22px}
+  .gisa .benefits span + span::before{content:"·";color:var(--accent);font-weight:800}
+
+  @keyframes gisaRise{to{opacity:1;transform:translateY(0)}}
+
+  .gisa .logos{background:var(--bg-alt);padding:64px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+  .gisa .logos .head{text-align:center;margin-bottom:36px}
+  .gisa .logo-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:28px;align-items:center}
+  @media (max-width:900px){.gisa .logo-grid{grid-template-columns:repeat(3,1fr)}}
+  @media (max-width:520px){.gisa .logo-grid{grid-template-columns:repeat(2,1fr)}}
+  .gisa .logo-item{
+    height:64px;border:1px solid var(--border-strong);border-radius:12px;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--text-muted);font-weight:700;font-size:14px;letter-spacing:.04em;
+    opacity:.7;filter:grayscale(1);transition:opacity .25s var(--ease), filter .25s var(--ease), transform .25s var(--ease);
+    background:#fff;text-align:center;padding:0 12px;
+  }
+  .gisa .logo-item:hover{opacity:1;filter:none;transform:translateY(-2px)}
+
+  .gisa .stats{background:var(--bg-alt);padding:64px 0}
+  .gisa .stats-grid{display:grid;grid-template-columns:repeat(3,1fr)}
+  @media (max-width:760px){.gisa .stats-grid{grid-template-columns:1fr}}
+  .gisa .stat{padding:16px 32px;text-align:center}
+  .gisa .stat + .stat{border-left:1px solid var(--border-strong)}
+  @media (max-width:760px){
+    .gisa .stat + .stat{border-left:0;border-top:1px solid var(--border-strong);padding-top:32px;margin-top:16px}
+  }
+  .gisa .stat .num{
+    font-family:"Fraunces",serif;font-weight:700;font-variation-settings:"opsz" 144;
+    color:var(--accent-dark);font-size:clamp(40px,5vw,60px);line-height:1;letter-spacing:-.02em;
+    font-variant-numeric:tabular-nums;
+  }
+  .gisa .stat .lab{margin-top:12px;color:var(--text-muted);font-size:15px;font-weight:500}
+
+  .gisa .diag .head{text-align:center;max-width:780px;margin-inline:auto;margin-bottom:48px}
+  .gisa .diag h2{margin-top:14px}
+  .gisa .diag .sub{margin-top:18px;text-wrap:pretty}
+  .gisa .diag .subhead{
+    text-align:center;font-weight:700;color:var(--petroleo);font-size:14px;
+    letter-spacing:.06em;text-transform:uppercase;margin:8px 0 28px;
+  }
+  .gisa .scenes{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 28px;max-width:980px;margin:0 auto}
+  @media (max-width:760px){.gisa .scenes{grid-template-columns:1fr}}
+  .gisa .scene{
+    display:flex;gap:14px;align-items:flex-start;
+    padding:18px 18px;border-radius:14px;border:1px solid var(--border);
+    background:#fff;transition:border-color .2s var(--ease), transform .2s var(--ease), box-shadow .2s var(--ease);
+  }
+  .gisa .scene:hover{border-color:var(--border-strong);transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+  .gisa .scene .ico{
+    flex:none;width:36px;height:36px;border-radius:10px;
+    background:rgba(210,172,103,.15);color:var(--accent-dark);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .gisa .scene p{font-size:15.5px;color:var(--text);line-height:1.5}
+  .gisa .diag .close{
+    margin:56px auto 0;max-width:720px;text-align:center;
+    font-family:"Fraunces",serif;font-style:italic;font-size:clamp(20px,2vw,24px);
+    color:var(--text);line-height:1.45;font-variation-settings:"opsz" 72;
+  }
+  .gisa .diag .close::before, .gisa .diag .close::after{
+    content:"";display:block;width:40px;height:1px;background:var(--accent);margin:24px auto;
+  }
+
+  .gisa .servicos{background:var(--bg-alt)}
+  .gisa .servicos .head{max-width:760px;margin-bottom:48px}
+  .gisa .servicos h2{margin-top:14px}
+  .gisa .servicos .sub{margin-top:14px}
+  .gisa .cards-4{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+  @media (max-width:1000px){.gisa .cards-4{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:560px){.gisa .cards-4{grid-template-columns:1fr}}
+  .gisa .svc{
+    background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);
+    padding:28px 24px;transition:transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s var(--ease);
+    display:flex;flex-direction:column;gap:14px;
+  }
+  .gisa .svc:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:var(--border-strong)}
+  .gisa .svc .ico{
+    width:48px;height:48px;border-radius:12px;color:var(--petroleo);
+    background:rgba(19,110,138,.10);display:flex;align-items:center;justify-content:center;
+  }
+  .gisa .svc h3{font-size:20px;font-family:"Fraunces",serif}
+  .gisa .svc p{color:var(--text-muted);font-size:15.5px;line-height:1.6}
+
+  .gisa .fund{position:relative}
+  .gisa .fund-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:64px;align-items:center}
+  @media (max-width:900px){.gisa .fund-grid{grid-template-columns:1fr;gap:40px}}
+  .gisa .fund-photo .frame{
+    aspect-ratio:4/5;border-radius:var(--radius-lg);overflow:hidden;position:relative;
+    background:linear-gradient(160deg,#1A2F45,#091E2D);box-shadow:var(--shadow-lg);
+  }
+  .gisa .fund-photo .frame::after{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(120% 60% at 80% 0%, rgba(210,172,103,.22), transparent 60%);
+  }
+  .gisa .fund-photo .ph-label{
+    position:absolute;left:18px;bottom:18px;z-index:2;color:rgba(255,255,255,.78);
+    font-size:12px;background:rgba(9,30,45,.45);padding:8px 12px;border-radius:999px;backdrop-filter:blur(6px);
+  }
+  .gisa .fund-text h2{margin-top:14px}
+  .gisa .fund-text p{color:var(--text-muted);font-size:17px;line-height:1.65;margin-top:18px;max-width:54ch}
+  .gisa .fund-text .sig{
+    margin-top:28px;display:inline-flex;align-items:center;gap:14px;
+    padding:12px 16px;border-radius:999px;background:var(--bg-alt);border:1px solid var(--border);
+  }
+  .gisa .fund-text .sig .av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--petroleo),var(--accent))}
+  .gisa .fund-text .sig span{font-weight:700;font-size:14px}
+
+  .gisa .plano{background:var(--bg-alt)}
+  .gisa .plano .head{max-width:760px;margin-bottom:48px}
+  .gisa .plano h2{margin-top:14px}
+  .gisa .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;position:relative}
+  @media (max-width:900px){.gisa .steps{grid-template-columns:1fr}}
+  .gisa .steps::before{
+    content:"";position:absolute;top:38px;left:8%;right:8%;height:1px;
+    background:repeating-linear-gradient(to right, var(--accent) 0 6px, transparent 6px 12px);
+    z-index:0;
+  }
+  @media (max-width:900px){.gisa .steps::before{display:none}}
+  .gisa .step{
+    background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);
+    padding:28px 24px;position:relative;z-index:1;
+    transition:transform .25s var(--ease), box-shadow .25s var(--ease);
+  }
+  .gisa .step:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+  .gisa .step .badge{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:56px;height:56px;border-radius:999px;
+    background:linear-gradient(135deg,var(--accent),var(--accent-dark));color:#091E2D;
+    font-family:"Fraunces",serif;font-weight:700;font-size:22px;
+    box-shadow:0 8px 20px -8px rgba(184,149,86,.6);
+  }
+  .gisa .step h3{margin-top:18px;font-size:20px}
+  .gisa .step p{margin-top:10px;color:var(--text-muted);font-size:15.5px;line-height:1.6}
+
+  .gisa .transf .head{max-width:780px;margin-bottom:48px}
+  .gisa .transf h2{margin-top:14px}
+  .gisa .transf-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:stretch}
+  @media (max-width:900px){.gisa .transf-grid{grid-template-columns:1fr}}
+  .gisa .tcol{
+    padding:32px 26px;border-radius:var(--radius-lg);position:relative;
+    display:flex;flex-direction:column;gap:18px;
+  }
+  .gisa .tcol .tag{
+    font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:800;
+    display:inline-flex;align-items:center;gap:8px;
+  }
+  .gisa .tcol p{font-size:16px;line-height:1.65}
+  .gisa .tcol.antes{background:#F4F1EA;color:var(--text-muted);border:1px solid var(--border-strong)}
+  .gisa .tcol.antes .tag{color:#8A7B5C}
+  .gisa .tcol.ponte{background:#fff;border:1px solid var(--border);color:var(--text)}
+  .gisa .tcol.ponte .tag{color:var(--accent-dark)}
+  .gisa .tcol.depois{background:linear-gradient(170deg,var(--petroleo-dark),var(--bg-dark));color:#fff;border:1px solid var(--surface-dark)}
+  .gisa .tcol.depois .tag{color:var(--accent)}
+  .gisa .tcol.depois p{color:var(--text-on-dark)}
+  .gisa .tcol .arrow{position:absolute;top:50%;right:-20px;transform:translateY(-50%);z-index:2;color:var(--accent)}
+  @media (max-width:900px){.gisa .tcol .arrow{display:none}}
+
+  .gisa #form{
+    background:var(--bg-dark);color:#fff;position:relative;overflow:hidden;isolation:isolate;
+  }
+  .gisa #form::before{
+    content:"";position:absolute;inset:0;z-index:-1;
+    background:
+      radial-gradient(50% 60% at 15% 10%, rgba(210,172,103,.18), transparent 60%),
+      radial-gradient(60% 60% at 90% 90%, rgba(27,138,171,.22), transparent 60%);
+  }
+  .gisa .cta-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+  @media (max-width:900px){.gisa .cta-grid{grid-template-columns:1fr;gap:40px}}
+  .gisa .cta-text h2{color:#fff;font-family:"Fraunces",serif;font-variation-settings:"opsz" 96}
+  .gisa .cta-text .sub{color:var(--text-on-dark-soft);margin-top:18px;font-size:17px;line-height:1.6;max-width:52ch}
+  .gisa .form-card{
+    background:#fff;color:var(--text);border-radius:var(--radius-lg);
+    padding:28px;box-shadow:var(--shadow-lg);max-width:480px;width:100%;justify-self:end;
+    border:1px solid var(--border);
+  }
+  @media (max-width:900px){.gisa .form-card{justify-self:stretch;margin:0 auto}}
+  .gisa .form-card h3{font-size:20px;font-family:"Fraunces",serif}
+  .gisa .field{display:flex;flex-direction:column;gap:6px;margin-top:14px}
+  .gisa .field label{font-size:13px;font-weight:600;color:var(--text)}
+  .gisa .field input,.gisa .field select{
+    appearance:none;-webkit-appearance:none;
+    width:100%;padding:13px 14px;border:1px solid var(--border-strong);background:#fff;
+    border-radius:10px;font:inherit;color:var(--text);transition:border-color .2s var(--ease), box-shadow .2s var(--ease);
+  }
+  .gisa .field select{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%234A5A6E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m6 9 6 6 6-6'/></svg>");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px}
+  .gisa .field input:focus,.gisa .field select:focus{outline:0;border-color:var(--petroleo);box-shadow:0 0 0 3px rgba(19,110,138,.15)}
+  .gisa .field .err{font-size:12.5px;color:#B23A3A;display:none}
+  .gisa .field.invalid input,.gisa .field.invalid select{border-color:#B23A3A;box-shadow:0 0 0 3px rgba(178,58,58,.12)}
+  .gisa .field.invalid .err{display:block}
+  .gisa .submit-row{margin-top:20px}
+  .gisa .submit-row .btn{width:100%}
+  .gisa .form-card .micro{text-align:center}
+
+  .gisa .faq .head{max-width:760px;margin-bottom:40px}
+  .gisa .faq h2{margin-top:14px}
+  .gisa .faq-list{max-width:820px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+  .gisa details.qa{
+    background:#fff;border:1px solid var(--border);border-radius:14px;padding:4px 4px;
+    transition:border-color .2s var(--ease), box-shadow .2s var(--ease), background-color .2s var(--ease);
+  }
+  .gisa details.qa[open]{border-color:var(--border-strong);box-shadow:var(--shadow-sm)}
+  .gisa details.qa > summary{
+    list-style:none;cursor:pointer;padding:18px 18px;display:flex;align-items:center;justify-content:space-between;gap:18px;
+    font-weight:600;font-size:16px;color:var(--text);
+  }
+  .gisa details.qa > summary::-webkit-details-marker{display:none}
+  .gisa details.qa > summary .ic{
+    flex:none;width:30px;height:30px;border-radius:50%;background:var(--bg-alt);
+    display:flex;align-items:center;justify-content:center;color:var(--petroleo);
+    transition:transform .25s var(--ease), background-color .2s var(--ease);
+  }
+  .gisa details.qa[open] > summary .ic{transform:rotate(45deg);background:rgba(210,172,103,.18);color:var(--accent-dark)}
+  .gisa details.qa .ans{padding:0 18px 20px;color:var(--text-muted);line-height:1.65;font-size:15.5px}
+
+  .gisa .close-sec{background:var(--bg-alt);padding:72px 0}
+  .gisa .close-inner{max-width:600px;margin:0 auto;text-align:center}
+  .gisa .close-inner h3{font-size:clamp(26px,3vw,34px);line-height:1.2}
+  .gisa .close-inner .btn{margin-top:24px}
+
+  .gisa footer{background:var(--bg-dark);color:var(--text-on-dark);padding:72px 0 28px}
+  .gisa .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px}
+  @media (max-width:900px){.gisa .foot-grid{grid-template-columns:1fr 1fr}}
+  @media (max-width:560px){.gisa .foot-grid{grid-template-columns:1fr}}
+  .gisa footer .logo{color:#fff}
+  .gisa footer .col p, .gisa footer .col a{color:var(--text-on-dark);font-size:14.5px;line-height:1.7}
+  .gisa footer .col a{display:inline-flex;align-items:center;gap:10px;padding:4px 0;border-radius:6px;transition:color .2s var(--ease)}
+  .gisa footer .col a:hover{color:var(--accent)}
+  .gisa footer .eyebrow{color:var(--accent);margin-bottom:16px}
+  .gisa footer .eyebrow::before{background:var(--accent)}
+  .gisa footer .stack{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+  .gisa .bottom-bar{
+    margin-top:48px;padding-top:24px;border-top:1px solid var(--border-dark);
+    color:var(--text-on-dark-soft);font-size:13px;text-align:center;
+  }
+
+  .gisa .i{width:20px;height:20px;stroke-width:2;stroke:currentColor;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .gisa .i-lg{width:24px;height:24px}
+
+  @media (prefers-reduced-motion: reduce){
+    .gisa *{animation:none!important;transition:none!important}
+    html{scroll-behavior:auto}
+  }
+`;
+
+const BODY_HTML = `
+<header class="nav" id="nav">
+  <div class="container nav-inner">
+    <a href="#hero" class="logo" aria-label="Gisa, página inicial">Gisa<span class="dot">.</span></a>
+    <nav class="nav-links" id="navLinks" aria-label="Navegação principal">
+      <a href="#hero">Início</a>
+      <a href="#servicos">Serviços</a>
+      <a href="#fundador">Sobre</a>
+      <a href="#faq">Dúvidas frequentes</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="#form" class="btn btn-primary">Quero uma avaliação gratuita</a>
+      <button class="menu-btn" id="menuBtn" aria-label="Abrir menu" aria-expanded="false" aria-controls="navLinks">
+        <svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<section class="hero" id="hero">
+  <svg class="grain" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 0.04  0 0 0 0 0.12  0 0 0 0 0.18  0 0 0 0.08 0"/></filter>
+    <rect width="100%" height="100%" filter="url(#n)"/>
+  </svg>
+  <div class="container hero-grid">
+    <div class="hero-text">
+      <span class="eyebrow">Facilities no Rio de Janeiro</span>
+      <h1>Portaria, limpeza, controle de acesso e vigia da sua operação sob uma única cultura de segurança.</h1>
+      <p class="lead">Mais de 30 anos no setor de facilities, atendendo condomínios residenciais e operações corporativas no Rio de Janeiro.</p>
+      <div class="cta-row">
+        <a href="#form" class="btn btn-primary btn-lg">Quero uma avaliação gratuita
+          <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <p class="micro">Avaliação personalizada, sem compromisso.</p>
+      </div>
+      <div class="benefits" aria-label="Benefícios">
+        <span>Controle</span><span>Tranquilidade</span><span>Confiança</span><span>Responsabilidade</span>
+      </div>
+    </div>
+    <div class="hero-photo">
+      <div class="frame" role="img" aria-label="Foto real de equipe uniformizada em postura de trabalho">
+        <span class="ph-label">foto real de equipe uniformizada em postura de trabalho</span>
+      </div>
+      <div class="badge" aria-hidden="true">
+        <span class="num">30+</span>
+        <span class="lab">anos no setor de facilities no Rio</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="logos" aria-label="Quem confia na operação da Gisa">
+  <div class="container">
+    <div class="head"><span class="eyebrow">Quem confia na operação da Gisa</span></div>
+    <div class="logo-grid">
+      <div class="logo-item">CEASA RJ</div>
+      <div class="logo-item">Unidas Locadora</div>
+      <div class="logo-item">Unidas Seminovos</div>
+      <div class="logo-item">Condomínio 1</div>
+      <div class="logo-item">Condomínio 2</div>
+      <div class="logo-item">Condomínio 3</div>
+    </div>
+  </div>
+</section>
+
+<section class="stats" aria-label="Números da Gisa">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat">
+        <div class="num"><span>+</span><span class="count" data-to="30">0</span><span> anos</span></div>
+        <div class="lab">de experiência no setor</div>
+      </div>
+      <div class="stat">
+        <div class="num"><span>+</span><span class="count" data-to="15000">0</span><span> pessoas</span></div>
+        <div class="lab">sob responsabilidade diária da Gisa</div>
+      </div>
+      <div class="stat">
+        <div class="num"><span>+</span><span class="count" data-to="500000">0</span><span> m²</span></div>
+        <div class="lab">de área operada no Rio de Janeiro</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="diag">
+  <div class="container">
+    <div class="head">
+      <span class="eyebrow">Diagnóstico</span>
+      <h2>Você comanda o dia a dia ou apaga incêndio em todos eles?</h2>
+      <p class="lead sub">Cada frente atende por um contato diferente, um padrão diferente. Funciona enquanto você está em cima. Quando você precisa cuidar de outra coisa, alguma frente afrouxa.</p>
+    </div>
+    <p class="subhead">Cenas que provavelmente já apareceram na sua operação</p>
+    <div class="scenes">
+      <div class="scene"><span class="ico"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12h6m-3-3v6M14 19a4 4 0 0 1 8 0M18 14a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/></svg></span><p>Porteiro do plantão noturno dormindo em serviço</p></div>
+      <div class="scene"><span class="ico"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21V7l9-4 9 4v14M3 21h18M9 21v-6h6v6"/></svg></span><p>Portão de garagem deixado aberto após a passagem de um morador</p></div>
+      <div class="scene"><span class="ico"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 8 12 3 3 8l9 5 9-5ZM3 8v8l9 5 9-5V8"/></svg></span><p>Encomenda jogada na portaria, caixas largadas sem registro</p></div>
+      <div class="scene"><span class="ico"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="7" r="4"/><path d="M3 21a6 6 0 0 1 12 0M17 11l2 2 4-4"/></svg></span><p>Empresa terceirizada que faltou na escala e não repôs</p></div>
+      <div class="scene"><span class="ico"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h12"/></svg></span><p>Recepção corporativa perdeu o controle de quem entrou em horário de pico</p></div>
+      <div class="scene"><span class="ico"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M1 17h2V7h11v10h2M16 17h2l3-4v-2h-5M5 21a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM18 21a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/></svg></span><p>Caminhão de carga parado na portaria porque a triagem é manual</p></div>
+    </div>
+    <p class="close">A equipe está fazendo o que foi treinada pra fazer. O problema não é nenhuma frente isolada. É a operação inteira tratada como peças soltas.</p>
+  </div>
+</section>
+
+<section class="servicos" id="servicos">
+  <div class="container">
+    <div class="head">
+      <span class="eyebrow">Serviços</span>
+      <h2>Como a Gisa atua no seu prédio</h2>
+      <p class="lead sub">Uma só cultura de operação aplicada a cada frente, em cada turno, em todo o prédio.</p>
+    </div>
+    <div class="cards-4">
+      <article class="svc">
+        <span class="ico"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 4 4 6v15h6v-6h4v6h6V10"/><path d="M13 4v17"/><circle cx="11" cy="12" r=".8" fill="currentColor"/></svg></span>
+        <h3>Portaria e recepção</h3>
+        <p>Identificam, autorizam e registram a entrada de moradores, visitantes, prestadores e fornecedores. Gerenciam o fluxo do prédio, recebem encomendas e são o primeiro ponto de contato de quem chega.</p>
+      </article>
+      <article class="svc">
+        <span class="ico"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/></svg></span>
+        <h3>Limpeza</h3>
+        <p>Conservação e higienização das áreas comuns com rotina adaptada a cada tipo de espaço. Procedimentos definidos por frequência, tipo de superfície e perfil de uso do ambiente.</p>
+      </article>
+      <article class="svc">
+        <span class="ico"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 12h10"/></svg></span>
+        <h3>Controle de acesso</h3>
+        <p>Monitoramento e gestão dos pontos críticos de entrada: garagem, área de carga, serviços e perímetro externo. Cada acesso opera com procedimento próprio, por turno e perfil de entrada.</p>
+      </article>
+      <article class="svc">
+        <span class="ico"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16a2 2 0 1 0 4 0c0-1-.5-1.8-1-3l-1-3a2 2 0 1 1 4 0v6M14 16a2 2 0 1 0 4 0c0-1-.5-1.8-1-3l-1-3a2 2 0 1 1 4 0v6"/></svg></span>
+        <h3>Vigia</h3>
+        <p>Proteção patrimonial por meio de rondas programadas e presença ativa no perímetro. Profissionais treinados para observar, registrar e acionar quando necessário.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="fund" id="fundador">
+  <div class="container fund-grid">
+    <div class="fund-photo">
+      <div class="frame" role="img" aria-label="Foto real do Lawrence ou da equipe operando">
+        <span class="ph-label">foto real do Lawrence ou da equipe operando</span>
+      </div>
+    </div>
+    <div class="fund-text">
+      <span class="eyebrow">Fundador</span>
+      <h2>Conheça o fundador</h2>
+      <p>Lawrence Vale começou no setor de facilities aos 15 anos, acompanhando o pai na empresa dele. Hoje soma mais de 30 anos de experiência operando prédios de todo tipo no Rio de Janeiro, à frente da sua própria empresa.</p>
+      <p>A Gisa nasceu dessa trajetória consolidada e foi estruturada para tratar facilities como uma operação única, com cultura e supervisão consistentes.</p>
+      <div class="sig"><span class="av" aria-hidden="true"></span><span>Lawrence Vale, fundador</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="plano">
+  <div class="container">
+    <div class="head">
+      <span class="eyebrow">Processo</span>
+      <h2>Como funciona o início da operação com a Gisa</h2>
+      <p class="lead sub">Três etapas, do diagnóstico inicial ao primeiro turno em funcionamento.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="badge">01</div>
+        <h3>Avaliação gratuita</h3>
+        <p>Visitamos o seu prédio, conversamos com o responsável e observamos a operação no dia a dia. Você recebe um diagnóstico escrito com os pontos críticos identificados.</p>
+      </div>
+      <div class="step">
+        <div class="badge">02</div>
+        <h3>Proposta comercial</h3>
+        <p>Com base no diagnóstico, montamos uma proposta com escopo, transição e custos detalhados. Você analisa, tira dúvidas e decide o que faz sentido para o seu prédio.</p>
+      </div>
+      <div class="step">
+        <div class="badge">03</div>
+        <h3>Início da operação</h3>
+        <p>A Gisa assume o dia a dia com equipe alocada, supervisor designado e canal direto de comunicação. A partir desse ponto, a operação passa a ter um único responsável.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="transf">
+  <div class="container">
+    <div class="head">
+      <span class="eyebrow">Transformação</span>
+      <h2>O que muda na sua rotina quando a Gisa assume a operação</h2>
+    </div>
+    <div class="transf-grid">
+      <div class="tcol antes">
+        <span class="tag">Antes</span>
+        <p>Você para de coordenar fornecedores diferentes, vencimentos cruzados, escopos que não se encaixam e supervisões que não conversam entre si.</p>
+        <svg class="arrow i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </div>
+      <div class="tcol ponte">
+        <span class="tag">Estrutura</span>
+        <p>Passa a ter um único interlocutor responsável pela operação inteira. Um relatório consolidado, um protocolo, uma supervisão.</p>
+        <svg class="arrow i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </div>
+      <div class="tcol depois">
+        <span class="tag">Depois</span>
+        <p>O dia a dia deixa de ser uma sucessão de incêndios a apagar e passa a operar dentro de um padrão definido. Você deixa de gerenciar fornecedores soltos e passa a administrar de fato, com tempo e clareza para decidir o que importa.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="form">
+  <div class="container cta-grid">
+    <div class="cta-text">
+      <h2>Sua operação merece um padrão único. Comece pela avaliação gratuita.</h2>
+      <p class="sub">Preencha abaixo. Em até 1 dia útil, nossa equipe entra em contato pelo WhatsApp para agendar a visita.</p>
+    </div>
+    <form class="form-card" id="leadForm" novalidate aria-label="Solicitar avaliação gratuita">
+      <h3>Avaliação gratuita</h3>
+      <div class="field" data-field="nome">
+        <label for="f-nome">Nome</label>
+        <input id="f-nome" name="nome" type="text" autocomplete="name" placeholder="Seu nome completo" required maxlength="100" />
+        <span class="err">Informe seu nome.</span>
+      </div>
+      <div class="field" data-field="whatsapp">
+        <label for="f-zap">WhatsApp</label>
+        <input id="f-zap" name="whatsapp" type="tel" autocomplete="tel" inputmode="tel" placeholder="(21) 99999-9999" required maxlength="16" />
+        <span class="err">Informe um WhatsApp válido.</span>
+      </div>
+      <div class="field" data-field="tipo">
+        <label for="f-tipo">Tipo de operação</label>
+        <select id="f-tipo" name="tipo" required>
+          <option value="" disabled selected>Selecione…</option>
+          <option>Condomínio residencial</option>
+          <option>Operação corporativa</option>
+        </select>
+        <span class="err">Selecione o tipo de operação.</span>
+      </div>
+      <div class="field" data-field="predio">
+        <label for="f-predio">Nome do prédio ou empresa</label>
+        <input id="f-predio" name="predio" type="text" placeholder="Ex: Edifício Vista Mar" required maxlength="120" />
+        <span class="err">Informe o nome do prédio ou empresa.</span>
+      </div>
+      <div class="submit-row">
+        <button type="submit" class="btn btn-primary btn-lg">Quero uma avaliação gratuita</button>
+        <p class="micro">Prefere falar direto? WhatsApp (21)&nbsp;96462-8256.</p>
+      </div>
+      <p class="sr" aria-live="polite" id="formStatus" style="position:absolute;left:-9999px"></p>
+    </form>
+  </div>
+</section>
+
+<section class="faq" id="faq">
+  <div class="container">
+    <div class="head">
+      <span class="eyebrow">Dúvidas frequentes</span>
+      <h2>Perguntas frequentes</h2>
+    </div>
+    <div class="faq-list">
+      <details class="qa"><summary>A Gisa atende condomínio residencial e operação corporativa ao mesmo tempo?<span class="ic" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="ans">Sim. A estrutura foi desenhada pra operar com cultura única em qualquer tipo de prédio. O que muda entre um condomínio e uma operação corporativa é o perfil da equipe e o protocolo.</div></details>
+      <details class="qa"><summary>Vocês fazem vigilância armada ou monitoramento eletrônico?<span class="ic" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="ans">Não. A Gisa é uma empresa de facilities com cultura de segurança, não de vigilância armada nem monitoramento eletrônico. Atuamos com portaria, limpeza, controle de acesso e vigia patrimonial e de rondas.</div></details>
+      <details class="qa"><summary>Como funciona a transição quando já existem fornecedores no local?<span class="ic" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="ans">A proposta inclui um plano de transição com cronograma definido. Em alguns casos a Gisa assume tudo de uma vez. Em outros, começa por uma frente crítica e expande. A decisão é caso a caso.</div></details>
+      <details class="qa"><summary>Posso contratar só uma frente em vez das quatro?<span class="ic" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="ans">Pode. A operação integrada é o que a Gisa entrega melhor, mas é comum começar por uma frente (portaria, em geral) e expandir conforme a relação amadurece.</div></details>
+      <details class="qa"><summary>Vocês atendem qual região do Rio de Janeiro?<span class="ic" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="ans">A Gisa atende todo o estado do Rio de Janeiro. Com sede em Campo Grande, operamos em condomínios e operações corporativas em diferentes regiões.</div></details>
+      <details class="qa"><summary>O que está incluído na avaliação gratuita?<span class="ic" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="ans">Visita ao local, conversa com o responsável e análise das frentes que fazem sentido pra você. Sem compromisso de contratação.</div></details>
+    </div>
+  </div>
+</section>
+
+<section class="close-sec">
+  <div class="container">
+    <div class="close-inner">
+      <h3>Vamos conversar sobre a sua operação?</h3>
+      <a href="#form" class="btn btn-primary btn-lg">Quero uma avaliação gratuita
+        <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <p class="micro">Prefere falar direto? WhatsApp (21)&nbsp;96462-8256.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div class="col">
+        <div class="logo">Gisa<span class="dot" style="color:var(--accent)">.</span></div>
+        <div class="stack" style="margin-top:14px">
+          <p>Gisa Segurança Eletrônica e Monitoramento LTDA</p>
+          <p>CNPJ: 28.363.155/0001-01</p>
+          <p>Campo Grande, Rio de Janeiro/RJ</p>
+        </div>
+      </div>
+      <div class="col">
+        <div class="eyebrow">Navegação</div>
+        <div class="stack">
+          <a href="#hero">Início</a>
+          <a href="#servicos">Serviços</a>
+          <a href="#fundador">Sobre</a>
+          <a href="#faq">Dúvidas frequentes</a>
+        </div>
+      </div>
+      <div class="col">
+        <div class="eyebrow">Contato</div>
+        <div class="stack">
+          <a href="https://wa.me/5521964628256" target="_blank" rel="noopener">
+            <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-1 4 8.5 8.5 0 0 1-7.5 4.5 8.4 8.4 0 0 1-4-1L3 21l2-5a8.5 8.5 0 1 1 16-4.5z"/></svg>
+            WhatsApp: (21)&nbsp;96462-8256
+          </a>
+          <a href="https://www.instagram.com/gisagrupo/" target="_blank" rel="noopener">
+            <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg>
+            Instagram: @gisagrupo
+          </a>
+        </div>
+      </div>
+    </div>
+    <p class="bottom-bar">© 2026 Gisa Segurança Eletrônica e Monitoramento LTDA. Todos os direitos reservados.</p>
+  </div>
+</footer>
+`;
 
 export const Route = createFileRoute("/")({
-  component: Index,
+  head: () => ({
+    meta: [
+      { title: "Gisa — Portaria, limpeza, controle de acesso e vigia sob uma única cultura de segurança" },
+      { name: "description", content: "Mais de 30 anos no setor de facilities, atendendo condomínios residenciais e operações corporativas no Rio de Janeiro." },
+      { property: "og:title", content: "Gisa — Facilities no Rio de Janeiro" },
+      { property: "og:description", content: "Portaria, limpeza, controle de acesso e vigia sob uma única cultura de segurança." },
+    ],
+    links: [
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap",
+      },
+    ],
+  }),
+  component: GisaLanding,
 });
 
-// IMPORTANT: Replace this placeholder. For sites with multiple pages (About, Services, Contact, etc.),
-// create separate route files (about.tsx, services.tsx, contact.tsx) — don't put all pages in this file.
-function PlaceholderIndex() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
-}
+function GisaLanding() {
+  useEffect(() => {
+    const root = document.querySelector(".gisa");
+    if (!root) return;
+    const $ = <T extends Element = HTMLElement>(sel: string) =>
+      root.querySelector(sel) as T | null;
+    const $$ = (sel: string) => Array.from(root.querySelectorAll(sel)) as HTMLElement[];
 
-function Index() {
-  return <PlaceholderIndex />;
+    const nav = $("#nav") as HTMLElement | null;
+    const onScroll = () => {
+      if (nav) nav.classList.toggle("scrolled", window.scrollY > 8);
+    };
+    document.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+
+    const menuBtn = $("#menuBtn") as HTMLButtonElement | null;
+    const navLinks = $("#navLinks") as HTMLElement | null;
+    const onMenu = () => {
+      if (!navLinks || !menuBtn) return;
+      const open = navLinks.classList.toggle("open");
+      menuBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    };
+    const onNavClick = (e: Event) => {
+      const t = e.target as HTMLElement;
+      if (t.tagName === "A" && navLinks && menuBtn) {
+        navLinks.classList.remove("open");
+        menuBtn.setAttribute("aria-expanded", "false");
+      }
+    };
+    menuBtn?.addEventListener("click", onMenu);
+    navLinks?.addEventListener("click", onNavClick);
+
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const formatNum = (n: number) => n.toLocaleString("pt-BR");
+    const animateCount = (el: HTMLElement) => {
+      const to = parseInt(el.getAttribute("data-to") || "0", 10) || 0;
+      if (prefersReduced) {
+        el.textContent = formatNum(to);
+        return;
+      }
+      const start = performance.now();
+      const dur = 1200;
+      const tick = (now: number) => {
+        const t = Math.min(1, (now - start) / dur);
+        const eased = 1 - Math.pow(1 - t, 4);
+        el.textContent = formatNum(Math.round(to * eased));
+        if (t < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    };
+    let io: IntersectionObserver | null = null;
+    if ("IntersectionObserver" in window) {
+      io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              animateCount(e.target as HTMLElement);
+              io?.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.4 },
+      );
+      $$(".count").forEach((el) => io!.observe(el));
+    } else {
+      $$(".count").forEach(animateCount);
+    }
+
+    const zap = $("#f-zap") as HTMLInputElement | null;
+    const onZap = () => {
+      if (!zap) return;
+      const d = zap.value.replace(/\D/g, "").slice(0, 11);
+      let out = "";
+      if (d.length === 0) out = "";
+      else if (d.length < 3) out = "(" + d;
+      else if (d.length <= 7) out = "(" + d.slice(0, 2) + ") " + d.slice(2);
+      else if (d.length <= 10) out = "(" + d.slice(0, 2) + ") " + d.slice(2, 6) + "-" + d.slice(6);
+      else out = "(" + d.slice(0, 2) + ") " + d.slice(2, 7) + "-" + d.slice(7);
+      zap.value = out;
+    };
+    zap?.addEventListener("input", onZap);
+
+    const form = $("#leadForm") as HTMLFormElement | null;
+    const setInvalid = (name: string, invalid: boolean) => {
+      const f = form?.querySelector('[data-field="' + name + '"]') as HTMLElement | null;
+      if (f) f.classList.toggle("invalid", invalid);
+    };
+    const onSubmit = (e: Event) => {
+      e.preventDefault();
+      if (!form) return;
+      const f = form as HTMLFormElement & Record<string, HTMLInputElement>;
+      const nome = f.nome.value.trim();
+      const whatsapp = f.whatsapp.value.trim();
+      const tipo = (f.tipo as unknown as HTMLSelectElement).value.trim();
+      const predio = f.predio.value.trim();
+      const digits = whatsapp.replace(/\D/g, "");
+
+      let ok = true;
+      if (!nome) { setInvalid("nome", true); ok = false; } else setInvalid("nome", false);
+      if (digits.length < 10) { setInvalid("whatsapp", true); ok = false; } else setInvalid("whatsapp", false);
+      if (!tipo) { setInvalid("tipo", true); ok = false; } else setInvalid("tipo", false);
+      if (!predio) { setInvalid("predio", true); ok = false; } else setInvalid("predio", false);
+
+      if (!ok) {
+        const first = form.querySelector(".invalid input, .invalid select") as HTMLElement | null;
+        first?.focus();
+        return;
+      }
+      const msg =
+        "Olá! Vim pelo site solicitar uma avaliação gratuita.\n\n" +
+        "Nome: " + nome + "\n" +
+        "WhatsApp: " + whatsapp + "\n" +
+        "Tipo de operação: " + tipo + "\n" +
+        "Prédio/Empresa: " + predio;
+      const url = "https://wa.me/5521964628256?text=" + encodeURIComponent(msg);
+      const w = window.open(url, "_blank");
+      if (!w) window.location.href = url;
+    };
+    form?.addEventListener("submit", onSubmit);
+
+    const clearInvalid = (el: Element) => {
+      const f = (el as HTMLElement).closest(".field");
+      if (f) f.classList.remove("invalid");
+    };
+    const fieldEls = form ? Array.from(form.querySelectorAll("input, select")) : [];
+    const onFieldChange = (e: Event) => clearInvalid(e.target as Element);
+    fieldEls.forEach((el) => {
+      el.addEventListener("input", onFieldChange);
+      el.addEventListener("change", onFieldChange);
+    });
+
+    return () => {
+      document.removeEventListener("scroll", onScroll);
+      menuBtn?.removeEventListener("click", onMenu);
+      navLinks?.removeEventListener("click", onNavClick);
+      zap?.removeEventListener("input", onZap);
+      form?.removeEventListener("submit", onSubmit);
+      io?.disconnect();
+      fieldEls.forEach((el) => {
+        el.removeEventListener("input", onFieldChange);
+        el.removeEventListener("change", onFieldChange);
+      });
+    };
+  }, []);
+
+  return (
+    <>
+      <style dangerouslySetInnerHTML={{ __html: STYLES }} />
+      <div className="gisa" dangerouslySetInnerHTML={{ __html: BODY_HTML }} />
+    </>
+  );
 }
