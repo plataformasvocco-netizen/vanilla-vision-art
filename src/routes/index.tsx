@@ -200,13 +200,19 @@ const STYLES = `
     box-shadow:var(--shadow-lg);
   }
   .gisa .hero-photo .frame img{width:100%;height:100%;object-fit:cover}
+  .gisa .hero-photo .frame::after{
+    content:"";position:absolute;left:0;right:0;bottom:14%;height:22%;
+    backdrop-filter:blur(14px) saturate(.9);-webkit-backdrop-filter:blur(14px) saturate(.9);
+    background:linear-gradient(180deg, rgba(9,30,45,0) 0%, rgba(9,30,45,.18) 100%);
+    pointer-events:none;z-index:2;
+  }
   .gisa .hero-photo .badge{
-    position:absolute;top:24px;right:-12px;z-index:3;
-    background:#fff;border:1px solid var(--border);box-shadow:var(--shadow);
+    position:absolute;left:50%;bottom:14%;transform:translate(-50%, 50%);z-index:4;
+    background:#fff;border:1px solid var(--border);box-shadow:var(--shadow-lg);
     padding:14px 18px;border-radius:14px;display:flex;align-items:center;gap:12px;
   }
   .gisa .hero-photo .badge .num{font-size:28px;font-weight:800;color:var(--petroleo);letter-spacing:-.03em}
-  .gisa .hero-photo .badge .lab{font-size:12px;color:var(--text-muted);line-height:1.2;max-width:120px;font-weight:500}
+  .gisa .hero-photo .badge .lab{font-size:12px;color:var(--text-muted);line-height:1.2;max-width:140px;font-weight:500}
 
   @keyframes gisaRise{to{opacity:1;transform:translateY(0)}}
 
