@@ -89,13 +89,14 @@ const STYLES = `
     will-change:transform;white-space:nowrap;isolation:isolate;border:0;overflow:hidden;
   }
   .gisa .btn::before{
-    content:"";position:absolute;inset:0;border-radius:inherit;padding:2px;
-    background:conic-gradient(from var(--gisa-angle), #584827 0%, #c7a03c 25%, #f9de90 32%, #c7a03c 42%, #584827 55%, #c7a03c 75%, #f9de90 82%, #c7a03c 92%, #584827 100%);
+    content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;
+    background:linear-gradient(135deg, rgba(199,160,60,.55), rgba(249,222,144,.15) 40%, rgba(199,160,60,.45));
     -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
             mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     -webkit-mask-composite:xor; mask-composite:exclude;
-    animation:gisaSpin 5s linear infinite;pointer-events:none;z-index:2;
+    opacity:.7;transition:opacity .3s var(--ease);pointer-events:none;z-index:2;
   }
+  .gisa .btn:hover::before{opacity:1}
   .gisa .btn-primary{
     background:linear-gradient(135deg, #E5BE78 0%, var(--accent) 45%, var(--accent-dark) 100%);
     color:#091E2D;
@@ -200,12 +201,7 @@ const STYLES = `
     box-shadow:var(--shadow-lg);
   }
   .gisa .hero-photo .frame img{width:100%;height:100%;object-fit:cover}
-  .gisa .hero-photo .frame::after{
-    content:"";position:absolute;left:0;right:0;bottom:14%;height:22%;
-    backdrop-filter:blur(14px) saturate(.9);-webkit-backdrop-filter:blur(14px) saturate(.9);
-    background:linear-gradient(180deg, rgba(9,30,45,0) 0%, rgba(9,30,45,.18) 100%);
-    pointer-events:none;z-index:2;
-  }
+  .gisa .hero-photo .frame::after{content:none}
   .gisa .hero-photo .badge{
     position:absolute;left:50%;bottom:14%;transform:translate(-50%, 50%);z-index:4;
     background:#fff;border:1px solid var(--border);box-shadow:var(--shadow-lg);
