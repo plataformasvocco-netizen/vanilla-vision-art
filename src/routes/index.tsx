@@ -653,7 +653,7 @@ const BODY_HTML = `
 <section class="diag">
   <div class="container">
     <div class="head">
-      <h2>Você comanda o dia a dia ou apaga incêndio em todos eles?</h2>
+      <h2>Você <span class="hl">comanda o dia a dia</span> ou <span class="hl-red">apaga incêndio</span> em todos eles?</h2>
       <p class="lead sub">Cada frente atende por um contato diferente, um padrão diferente. Funciona enquanto você está em cima. Quando você precisa cuidar de outra coisa, alguma frente afrouxa.</p>
     </div>
     <p class="subhead">Cenas que provavelmente já apareceram na sua operação</p>
