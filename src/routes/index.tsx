@@ -574,6 +574,17 @@ const STYLES = `
     .gisa *{animation:none!important;transition:none!important}
     html{scroll-behavior:auto}
   }
+
+  /* WhatsApp FAB (floating action button) */
+  .zap-fab{position:fixed;bottom:20px;right:20px;width:56px;height:56px;border-radius:50%;background:#25D366;color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(9,30,45,.25);z-index:100;transition:transform .2s ease, box-shadow .2s ease;text-decoration:none}
+  .zap-fab:hover{transform:scale(1.05);box-shadow:0 10px 28px rgba(37,211,102,.4)}
+  .zap-fab:active{transform:scale(.96)}
+  .zap-fab:focus-visible{outline:3px solid #fff;outline-offset:3px}
+  .zap-fab svg{width:30px;height:30px;fill:currentColor}
+  @media (max-width:640px){
+    .zap-fab{width:52px;height:52px;bottom:16px;right:16px}
+    .zap-fab svg{width:28px;height:28px}
+  }
 `;
 
 const BODY_HTML = `
@@ -735,7 +746,7 @@ const BODY_HTML = `
       <article class="svc">
         <div class="photo">
           <img src="${svcVigiaImg}" alt="Vigia Gisa fazendo registro de ronda" loading="lazy" width="800" height="600" />
-          <span class="ico"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16a2 2 0 1 0 4 0c0-1-.5-1.8-1-3l-1-3a2 2 0 1 1 4 0v6M14 16a2 2 0 1 0 4 0c0-1-.5-1.8-1-3l-1-3a2 2 0 1 1 4 0v6"/></svg></span>
+          <span class="ico"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg></span>
         </div>
         <div class="body">
           <h3>Vigia</h3>
@@ -943,6 +954,10 @@ const BODY_HTML = `
     <p class="bottom-bar">© 2026 Gisa Segurança Eletrônica e Monitoramento LTDA. Todos os direitos reservados.</p>
   </div>
 </footer>
+
+<a class="zap-fab" href="https://wa.me/5521964628256" target="_blank" rel="noopener noreferrer" aria-label="Falar pelo WhatsApp">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.498 14.382c-.301-.15-1.767-.867-2.04-.966-.273-.101-.473-.15-.673.15-.197.295-.771.964-.944 1.162-.175.195-.349.21-.646.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.019-.465.13-.61.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475s1.07 2.865 1.219 3.075c.149.18 2.095 3.195 5.076 4.485.711.3 1.26.495 1.692.63.711.225 1.36.195 1.871.121.571-.091 1.758-.721 2.006-1.413.255-.69.255-1.273.18-1.413-.074-.135-.27-.21-.57-.345m-5.446 7.443h-.016c-1.78 0-3.524-.48-5.045-1.38l-.36-.214-3.75.975 1.005-3.645-.239-.375a9.86 9.86 0 0 1-1.516-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885M20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.334.101 11.893c0 2.096.549 4.14 1.595 5.945L0 24l6.335-1.652a11.95 11.95 0 0 0 5.71 1.447h.006c6.583 0 11.946-5.336 11.949-11.896 0-3.176-1.24-6.165-3.495-8.411"/></svg>
+</a>
 `;
 
 export const Route = createFileRoute("/")({
