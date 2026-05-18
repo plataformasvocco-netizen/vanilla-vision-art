@@ -72,19 +72,62 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { name: "theme-color", content: "#FFFFFF" },
+      { title: "Gisa | Facilities com cultura de segurança no Rio de Janeiro" },
+      {
+        name: "description",
+        content:
+          "Portaria, limpeza, controle de acesso e vigia da sua operação sob uma única cultura de segurança. Mais de 30 anos no setor de facilities, atendendo condomínios residenciais e operações corporativas no Rio de Janeiro.",
+      },
+      { name: "author", content: "Gisa Segurança Eletrônica e Monitoramento LTDA" },
+      { property: "og:title", content: "Gisa | Facilities com cultura de segurança no Rio de Janeiro" },
+      {
+        property: "og:description",
+        content:
+          "Portaria, limpeza, controle de acesso e vigia da sua operação sob uma única cultura de segurança. Mais de 30 anos no setor.",
+      },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { property: "og:locale", content: "pt_BR" },
+      { property: "og:url", content: "https://gisagrupo.com.br" },
+      { property: "og:site_name", content: "Gisa" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Gisa | Facilities com cultura de segurança no Rio de Janeiro" },
+      {
+        name: "twitter:description",
+        content:
+          "Portaria, limpeza, controle de acesso e vigia da sua operação sob uma única cultura de segurança.",
+      },
     ],
     links: [
+      { rel: "stylesheet", href: appCss },
+      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
+      { rel: "canonical", href: "https://gisagrupo.com.br" },
+    ],
+    scripts: [
       {
-        rel: "stylesheet",
-        href: appCss,
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "LocalBusiness",
+          name: "Gisa Segurança Eletrônica e Monitoramento LTDA",
+          alternateName: "Gisa",
+          description:
+            "Empresa de facilities com cultura de segurança. Portaria, limpeza, controle de acesso e vigia para condomínios residenciais e operações corporativas no Rio de Janeiro.",
+          url: "https://gisagrupo.com.br",
+          telephone: "+55-21-96462-8256",
+          taxID: "28.363.155/0001-01",
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: "Campo Grande",
+            addressRegion: "RJ",
+            addressCountry: "BR",
+          },
+          areaServed: {
+            "@type": "State",
+            name: "Rio de Janeiro",
+          },
+          sameAs: ["https://www.instagram.com/gisagrupo/"],
+        }),
       },
     ],
   }),

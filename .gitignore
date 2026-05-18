@@ -30,3 +30,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# macOS metadata em volumes externos
+._*
+
+# Backups locais (não vão pro repo)
+**/backup-placeholders/
