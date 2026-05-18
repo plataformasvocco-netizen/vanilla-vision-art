@@ -678,7 +678,7 @@ const BODY_HTML = `
   <div class="container">
     <div class="head">
       <span class="eyebrow">Serviços</span>
-      <h2>Como a Gisa atua no seu prédio</h2>
+      <h2>Como a Gisa <span class="hl">atua no seu prédio</span></h2>
       <p class="lead sub">Uma só cultura de operação aplicada a cada frente, em cada turno, em todo o prédio.</p>
     </div>
     <div class="cards-4">
