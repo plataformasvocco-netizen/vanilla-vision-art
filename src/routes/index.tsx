@@ -200,12 +200,7 @@ const STYLES = `
     box-shadow:var(--shadow-lg);
   }
   .gisa .hero-photo .frame img{width:100%;height:100%;object-fit:cover}
-  .gisa .hero-photo .frame::after{
-    content:"";position:absolute;left:0;right:0;bottom:14%;height:22%;
-    backdrop-filter:blur(14px) saturate(.9);-webkit-backdrop-filter:blur(14px) saturate(.9);
-    background:linear-gradient(180deg, rgba(9,30,45,0) 0%, rgba(9,30,45,.18) 100%);
-    pointer-events:none;z-index:2;
-  }
+  .gisa .hero-photo .frame::after{content:none}
   .gisa .hero-photo .badge{
     position:absolute;left:50%;bottom:14%;transform:translate(-50%, 50%);z-index:4;
     background:#fff;border:1px solid var(--border);box-shadow:var(--shadow-lg);
