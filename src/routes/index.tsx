@@ -2,6 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 import equipeImg from "@/assets/equipe.jpg";
 import lawrenceImg from "@/assets/lawrence.jpg";
+import svcPortariaImg from "@/assets/svc-portaria.jpg";
+import svcLimpezaImg from "@/assets/svc-limpeza.jpg";
+import svcControleImg from "@/assets/svc-controle.jpg";
+import svcVigiaImg from "@/assets/svc-vigia.jpg";
 
 const STYLES = `
   :root{
