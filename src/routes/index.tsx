@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
+import equipeImg from "@/assets/equipe.jpg";
+import lawrenceImg from "@/assets/lawrence.jpg";
 
 const STYLES = `
   :root{
@@ -27,11 +29,12 @@ const STYLES = `
     --shadow:0 12px 30px -12px rgba(9,30,45,.18), 0 4px 10px -4px rgba(9,30,45,.08);
     --shadow-lg:0 30px 60px -20px rgba(9,30,45,.30);
     --ease:cubic-bezier(.2,.7,.1,1);
+    --ease-out:cubic-bezier(.16,1,.3,1);
     --container:1200px;
   }
   .gisa,.gisa *,.gisa *::before,.gisa *::after{box-sizing:border-box}
   .gisa{
-    font-family:"Manrope", system-ui, -apple-system, Segoe UI, sans-serif;
+    font-family:"Plus Jakarta Sans", system-ui, -apple-system, Segoe UI, sans-serif;
     font-size:17px;line-height:1.55;color:var(--text);background:var(--bg);
     -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
   }
@@ -52,12 +55,16 @@ const STYLES = `
   }
   .gisa .eyebrow::before{content:"";width:24px;height:1px;background:var(--accent)}
 
-  .gisa h1,.gisa h2,.gisa h3,.gisa h4{font-family:"Fraunces", Georgia, serif;font-weight:600;color:var(--text);margin:0;letter-spacing:-.01em;text-wrap:balance}
-  .gisa h1{font-size:clamp(40px,5.8vw,72px);font-variation-settings:"opsz" 144;line-height:1.04;letter-spacing:-.02em}
-  .gisa h2{font-size:clamp(30px,3.8vw,46px);line-height:1.1;font-variation-settings:"opsz" 96}
-  .gisa h3{font-size:clamp(22px,2.2vw,28px);line-height:1.2;font-variation-settings:"opsz" 48}
+  .gisa h1,.gisa h2,.gisa h3,.gisa h4{
+    font-family:"Plus Jakarta Sans", system-ui, sans-serif;
+    font-weight:700;color:var(--text);margin:0;
+    letter-spacing:-.02em;text-wrap:balance;
+  }
+  .gisa h1{font-size:clamp(36px,5.2vw,64px);line-height:1.05;font-weight:800;letter-spacing:-.035em}
+  .gisa h2{font-size:clamp(28px,3.4vw,42px);line-height:1.12;font-weight:700;letter-spacing:-.025em}
+  .gisa h3{font-size:clamp(20px,2vw,24px);line-height:1.25;font-weight:700;letter-spacing:-.015em}
   .gisa p{margin:0}
-  .gisa .lead{font-size:clamp(17px,1.4vw,19px);color:var(--text-muted);line-height:1.6;text-wrap:pretty}
+  .gisa .lead{font-size:clamp(16px,1.3vw,18px);color:var(--text-muted);line-height:1.6;text-wrap:pretty;font-weight:400}
 
   .gisa .btn{
     display:inline-flex;align-items:center;justify-content:center;gap:10px;
@@ -68,15 +75,20 @@ const STYLES = `
   .gisa .btn-primary{background:var(--accent);color:var(--text);box-shadow:var(--shadow)}
   .gisa .btn-primary:hover{background:var(--accent-dark);transform:translateY(-1px);box-shadow:var(--shadow-lg)}
   .gisa .btn-primary:active{transform:translateY(0)}
-  .gisa .btn-ghost{color:var(--text);background:transparent}
-  .gisa .btn-ghost:hover{background:var(--bg-alt)}
+  .gisa .btn-outline{
+    background:transparent;color:var(--text);border:1px solid var(--border-strong);
+  }
+  .gisa .btn-outline:hover{background:var(--bg-alt);border-color:var(--text)}
+  .gisa .btn-outline-light{
+    background:transparent;color:#fff;border:1px solid rgba(255,255,255,.25);
+  }
+  .gisa .btn-outline-light:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.5)}
   .gisa .btn-lg{padding:18px 28px;font-size:16px}
 
   .gisa .micro{margin-top:12px;font-size:13.5px;color:var(--text-muted)}
 
   .gisa .nav{
     position:sticky;top:0;z-index:50;
-    backdrop-filter:saturate(1.4) blur(0);
     background:rgba(255,255,255,.0);
     transition:background-color .3s var(--ease), backdrop-filter .3s var(--ease), box-shadow .3s var(--ease), border-color .3s var(--ease);
     border-bottom:1px solid transparent;
@@ -88,7 +100,7 @@ const STYLES = `
     border-bottom-color:var(--border);
   }
   .gisa .nav-inner{display:flex;align-items:center;justify-content:space-between;height:72px;gap:24px}
-  .gisa .logo{font-family:"Fraunces",serif;font-weight:700;font-size:26px;letter-spacing:-.02em;color:var(--text)}
+  .gisa .logo{font-weight:800;font-size:24px;letter-spacing:-.04em;color:var(--text)}
   .gisa .logo .dot{color:var(--accent)}
   .gisa .nav-links{display:flex;gap:6px;align-items:center}
   .gisa .nav-links a{
@@ -112,7 +124,7 @@ const STYLES = `
     .gisa .nav-cta .btn{display:none}
   }
 
-  .gisa .hero{padding-top:48px;padding-bottom:80px;overflow:hidden;position:relative;isolation:isolate}
+  .gisa .hero{padding-top:48px;padding-bottom:64px;overflow:hidden;position:relative;isolation:isolate}
   .gisa .hero::before{
     content:"";position:absolute;inset:-10% -10% auto -10%;height:90%;z-index:-2;
     background:
@@ -131,44 +143,52 @@ const STYLES = `
   .gisa .grain{position:absolute;inset:0;z-index:-1;opacity:.5;pointer-events:none;mix-blend-mode:multiply}
   .gisa .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:64px;align-items:center}
   @media (max-width:900px){.gisa .hero-grid{grid-template-columns:1fr;gap:40px}}
-  .gisa .hero-text > *{opacity:0;transform:translateY(14px);animation:gisaRise .8s var(--ease) forwards}
+  .gisa .hero-text > *{opacity:0;transform:translateY(14px);animation:gisaRise .8s var(--ease-out) forwards}
   .gisa .hero-text .eyebrow{animation-delay:.05s}
   .gisa .hero-text h1{animation-delay:.13s;margin-top:14px}
   .gisa .hero-text .lead{animation-delay:.21s;margin-top:18px;max-width:56ch}
-  .gisa .hero-text .cta-row{animation-delay:.29s;margin-top:28px;display:flex;flex-direction:column;align-items:flex-start;gap:8px}
-  .gisa .hero-text .benefits{animation-delay:.37s;margin-top:36px}
-  .gisa .hero-photo{opacity:0;transform:translateY(14px);animation:gisaRise .9s var(--ease) .25s forwards;position:relative}
+  .gisa .hero-text .cta-row{animation-delay:.29s;margin-top:28px;display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+  .gisa .hero-photo{opacity:0;transform:translateY(14px);animation:gisaRise .9s var(--ease-out) .25s forwards;position:relative}
   .gisa .hero-photo .frame{
     aspect-ratio:4/5;border-radius:var(--radius-lg);overflow:hidden;position:relative;
     background:linear-gradient(160deg,#0F5870,#091E2D 70%);
     box-shadow:var(--shadow-lg);
   }
-  .gisa .hero-photo .frame::after{
-    content:"";position:absolute;inset:0;
-    background:
-      radial-gradient(120% 60% at 20% 0%, rgba(210,172,103,.25), transparent 60%),
-      radial-gradient(80% 50% at 100% 100%, rgba(27,138,171,.35), transparent 60%);
-  }
-  .gisa .hero-photo .ph-label{
-    position:absolute;left:18px;bottom:18px;z-index:2;
-    color:rgba(255,255,255,.78);font-size:12px;letter-spacing:.05em;
-    background:rgba(9,30,45,.45);padding:8px 12px;border-radius:999px;backdrop-filter:blur(6px);
-  }
+  .gisa .hero-photo .frame img{width:100%;height:100%;object-fit:cover}
   .gisa .hero-photo .badge{
     position:absolute;top:24px;right:-12px;z-index:3;
     background:#fff;border:1px solid var(--border);box-shadow:var(--shadow);
     padding:14px 18px;border-radius:14px;display:flex;align-items:center;gap:12px;
   }
-  .gisa .hero-photo .badge .num{font-family:"Fraunces",serif;font-size:28px;font-weight:700;color:var(--petroleo)}
-  .gisa .hero-photo .badge .lab{font-size:12px;color:var(--text-muted);line-height:1.2;max-width:120px}
-
-  .gisa .benefits{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center;font-size:14.5px;color:var(--text-muted);font-weight:600;letter-spacing:.02em}
-  .gisa .benefits span{display:inline-flex;align-items:center;gap:22px}
-  .gisa .benefits span + span::before{content:"·";color:var(--accent);font-weight:800}
+  .gisa .hero-photo .badge .num{font-size:28px;font-weight:800;color:var(--petroleo);letter-spacing:-.03em}
+  .gisa .hero-photo .badge .lab{font-size:12px;color:var(--text-muted);line-height:1.2;max-width:120px;font-weight:500}
 
   @keyframes gisaRise{to{opacity:1;transform:translateY(0)}}
 
-  .gisa .logos{background:var(--bg-alt);padding:64px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+  /* Marquee benefits strip */
+  .gisa .marquee{
+    background:var(--bg-dark);color:#fff;
+    border-top:1px solid var(--surface-dark);border-bottom:1px solid var(--surface-dark);
+    overflow:hidden;position:relative;padding:18px 0;
+  }
+  .gisa .marquee::before,.gisa .marquee::after{
+    content:"";position:absolute;top:0;bottom:0;width:120px;z-index:2;pointer-events:none;
+  }
+  .gisa .marquee::before{left:0;background:linear-gradient(to right,var(--bg-dark),transparent)}
+  .gisa .marquee::after{right:0;background:linear-gradient(to left,var(--bg-dark),transparent)}
+  .gisa .marquee-track{
+    display:flex;gap:48px;width:max-content;animation:gisaMarquee 28s linear infinite;
+    will-change:transform;
+  }
+  .gisa .marquee:hover .marquee-track{animation-play-state:paused}
+  .gisa .m-item{
+    display:inline-flex;align-items:center;gap:14px;
+    font-size:18px;font-weight:600;letter-spacing:-.01em;color:#fff;white-space:nowrap;
+  }
+  .gisa .m-item .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex:none;box-shadow:0 0 0 6px rgba(210,172,103,.12)}
+  @keyframes gisaMarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  .gisa .logos{background:var(--bg-alt);padding:64px 0;border-bottom:1px solid var(--border)}
   .gisa .logos .head{text-align:center;margin-bottom:36px}
   .gisa .logo-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:28px;align-items:center}
   @media (max-width:900px){.gisa .logo-grid{grid-template-columns:repeat(3,1fr)}}
@@ -191,8 +211,8 @@ const STYLES = `
     .gisa .stat + .stat{border-left:0;border-top:1px solid var(--border-strong);padding-top:32px;margin-top:16px}
   }
   .gisa .stat .num{
-    font-family:"Fraunces",serif;font-weight:700;font-variation-settings:"opsz" 144;
-    color:var(--accent-dark);font-size:clamp(40px,5vw,60px);line-height:1;letter-spacing:-.02em;
+    font-weight:800;color:var(--accent-dark);
+    font-size:clamp(40px,5vw,60px);line-height:1;letter-spacing:-.04em;
     font-variant-numeric:tabular-nums;
   }
   .gisa .stat .lab{margin-top:12px;color:var(--text-muted);font-size:15px;font-weight:500}
@@ -219,13 +239,14 @@ const STYLES = `
   }
   .gisa .scene p{font-size:15.5px;color:var(--text);line-height:1.5}
   .gisa .diag .close{
-    margin:56px auto 0;max-width:720px;text-align:center;
-    font-family:"Fraunces",serif;font-style:italic;font-size:clamp(20px,2vw,24px);
-    color:var(--text);line-height:1.45;font-variation-settings:"opsz" 72;
+    margin:48px auto 0;max-width:720px;text-align:center;
+    font-style:italic;font-size:clamp(19px,1.8vw,22px);
+    color:var(--text);line-height:1.45;font-weight:500;
   }
   .gisa .diag .close::before, .gisa .diag .close::after{
     content:"";display:block;width:40px;height:1px;background:var(--accent);margin:24px auto;
   }
+  .gisa .section-cta{display:flex;justify-content:center;margin-top:40px}
 
   .gisa .servicos{background:var(--bg-alt)}
   .gisa .servicos .head{max-width:760px;margin-bottom:48px}
@@ -244,8 +265,8 @@ const STYLES = `
     width:48px;height:48px;border-radius:12px;color:var(--petroleo);
     background:rgba(19,110,138,.10);display:flex;align-items:center;justify-content:center;
   }
-  .gisa .svc h3{font-size:20px;font-family:"Fraunces",serif}
-  .gisa .svc p{color:var(--text-muted);font-size:15.5px;line-height:1.6}
+  .gisa .svc h3{font-size:19px}
+  .gisa .svc p{color:var(--text-muted);font-size:15px;line-height:1.6}
 
   .gisa .fund{position:relative}
   .gisa .fund-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:64px;align-items:center}
@@ -254,14 +275,7 @@ const STYLES = `
     aspect-ratio:4/5;border-radius:var(--radius-lg);overflow:hidden;position:relative;
     background:linear-gradient(160deg,#1A2F45,#091E2D);box-shadow:var(--shadow-lg);
   }
-  .gisa .fund-photo .frame::after{
-    content:"";position:absolute;inset:0;
-    background:radial-gradient(120% 60% at 80% 0%, rgba(210,172,103,.22), transparent 60%);
-  }
-  .gisa .fund-photo .ph-label{
-    position:absolute;left:18px;bottom:18px;z-index:2;color:rgba(255,255,255,.78);
-    font-size:12px;background:rgba(9,30,45,.45);padding:8px 12px;border-radius:999px;backdrop-filter:blur(6px);
-  }
+  .gisa .fund-photo .frame img{width:100%;height:100%;object-fit:cover;object-position:center 25%}
   .gisa .fund-text h2{margin-top:14px}
   .gisa .fund-text p{color:var(--text-muted);font-size:17px;line-height:1.65;margin-top:18px;max-width:54ch}
   .gisa .fund-text .sig{
@@ -270,6 +284,7 @@ const STYLES = `
   }
   .gisa .fund-text .sig .av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--petroleo),var(--accent))}
   .gisa .fund-text .sig span{font-weight:700;font-size:14px}
+  .gisa .fund-text .cta-row{margin-top:32px;display:flex;flex-wrap:wrap;gap:12px}
 
   .gisa .plano{background:var(--bg-alt)}
   .gisa .plano .head{max-width:760px;margin-bottom:48px}
@@ -292,11 +307,11 @@ const STYLES = `
     display:inline-flex;align-items:center;justify-content:center;
     width:56px;height:56px;border-radius:999px;
     background:linear-gradient(135deg,var(--accent),var(--accent-dark));color:#091E2D;
-    font-family:"Fraunces",serif;font-weight:700;font-size:22px;
+    font-weight:800;font-size:20px;letter-spacing:-.03em;
     box-shadow:0 8px 20px -8px rgba(184,149,86,.6);
   }
-  .gisa .step h3{margin-top:18px;font-size:20px}
-  .gisa .step p{margin-top:10px;color:var(--text-muted);font-size:15.5px;line-height:1.6}
+  .gisa .step h3{margin-top:18px;font-size:19px}
+  .gisa .step p{margin-top:10px;color:var(--text-muted);font-size:15px;line-height:1.6}
 
   .gisa .transf .head{max-width:780px;margin-bottom:48px}
   .gisa .transf h2{margin-top:14px}
@@ -310,7 +325,7 @@ const STYLES = `
     font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:800;
     display:inline-flex;align-items:center;gap:8px;
   }
-  .gisa .tcol p{font-size:16px;line-height:1.65}
+  .gisa .tcol p{font-size:15.5px;line-height:1.65}
   .gisa .tcol.antes{background:#F4F1EA;color:var(--text-muted);border:1px solid var(--border-strong)}
   .gisa .tcol.antes .tag{color:#8A7B5C}
   .gisa .tcol.ponte{background:#fff;border:1px solid var(--border);color:var(--text)}
@@ -321,26 +336,48 @@ const STYLES = `
   .gisa .tcol .arrow{position:absolute;top:50%;right:-20px;transform:translateY(-50%);z-index:2;color:var(--accent)}
   @media (max-width:900px){.gisa .tcol .arrow{display:none}}
 
+  /* Form section — rebalanced */
   .gisa #form{
     background:var(--bg-dark);color:#fff;position:relative;overflow:hidden;isolation:isolate;
   }
   .gisa #form::before{
     content:"";position:absolute;inset:0;z-index:-1;
     background:
-      radial-gradient(50% 60% at 15% 10%, rgba(210,172,103,.18), transparent 60%),
-      radial-gradient(60% 60% at 90% 90%, rgba(27,138,171,.22), transparent 60%);
+      radial-gradient(50% 60% at 15% 10%, rgba(210,172,103,.15), transparent 60%),
+      radial-gradient(60% 60% at 90% 90%, rgba(27,138,171,.18), transparent 60%);
   }
-  .gisa .cta-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+  .gisa .cta-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;
+    max-width:1080px;margin-inline:auto;
+  }
   @media (max-width:900px){.gisa .cta-grid{grid-template-columns:1fr;gap:40px}}
-  .gisa .cta-text h2{color:#fff;font-family:"Fraunces",serif;font-variation-settings:"opsz" 96}
-  .gisa .cta-text .sub{color:var(--text-on-dark-soft);margin-top:18px;font-size:17px;line-height:1.6;max-width:52ch}
+  .gisa .cta-text{padding-top:8px}
+  .gisa .cta-text .eyebrow{color:var(--accent)}
+  .gisa .cta-text .eyebrow::before{background:var(--accent)}
+  .gisa .cta-text h2{
+    color:#fff;margin-top:14px;
+    font-size:clamp(26px,2.6vw,34px);line-height:1.18;
+  }
+  .gisa .cta-text .sub{color:var(--text-on-dark-soft);margin-top:18px;font-size:16px;line-height:1.6;max-width:46ch}
+  .gisa .cta-bullets{margin-top:24px;display:flex;flex-direction:column;gap:12px}
+  .gisa .cta-bullets li{
+    display:flex;align-items:flex-start;gap:12px;list-style:none;
+    color:var(--text-on-dark);font-size:15px;
+  }
+  .gisa .cta-bullets svg{flex:none;color:var(--accent);margin-top:2px}
   .gisa .form-card{
-    background:#fff;color:var(--text);border-radius:var(--radius-lg);
-    padding:28px;box-shadow:var(--shadow-lg);max-width:480px;width:100%;justify-self:end;
+    position:relative;background:#fff;color:var(--text);border-radius:var(--radius-lg);
+    padding:28px;box-shadow:var(--shadow-lg);width:100%;
     border:1px solid var(--border);
   }
-  @media (max-width:900px){.gisa .form-card{justify-self:stretch;margin:0 auto}}
-  .gisa .form-card h3{font-size:20px;font-family:"Fraunces",serif}
+  .gisa .form-card::before{
+    content:"";position:absolute;inset:0;border-radius:var(--radius-lg);padding:1px;
+    -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;
+    background:linear-gradient(225deg, rgba(210,172,103,.6) 0%, rgba(255,255,255,0) 50%, rgba(27,138,171,.5) 100%);
+    pointer-events:none;
+  }
+  .gisa .form-card h3{font-size:19px;letter-spacing:-.02em}
   .gisa .field{display:flex;flex-direction:column;gap:6px;margin-top:14px}
   .gisa .field label{font-size:13px;font-weight:600;color:var(--text)}
   .gisa .field input,.gisa .field select{
@@ -355,7 +392,6 @@ const STYLES = `
   .gisa .field.invalid .err{display:block}
   .gisa .submit-row{margin-top:20px}
   .gisa .submit-row .btn{width:100%}
-  .gisa .form-card .micro{text-align:center}
 
   .gisa .faq .head{max-width:760px;margin-bottom:40px}
   .gisa .faq h2{margin-top:14px}
@@ -380,7 +416,7 @@ const STYLES = `
 
   .gisa .close-sec{background:var(--bg-alt);padding:72px 0}
   .gisa .close-inner{max-width:600px;margin:0 auto;text-align:center}
-  .gisa .close-inner h3{font-size:clamp(26px,3vw,34px);line-height:1.2}
+  .gisa .close-inner h3{font-size:clamp(24px,2.6vw,30px);line-height:1.2}
   .gisa .close-inner .btn{margin-top:24px}
 
   .gisa footer{background:var(--bg-dark);color:var(--text-on-dark);padding:72px 0 28px}
@@ -416,7 +452,7 @@ const BODY_HTML = `
       <a href="#hero">Início</a>
       <a href="#servicos">Serviços</a>
       <a href="#fundador">Sobre</a>
-      <a href="#faq">Dúvidas frequentes</a>
+      <a href="#faq">Perguntas frequentes</a>
     </nav>
     <div class="nav-cta">
       <a href="#form" class="btn btn-primary">Quero uma avaliação gratuita</a>
@@ -441,15 +477,12 @@ const BODY_HTML = `
         <a href="#form" class="btn btn-primary btn-lg">Quero uma avaliação gratuita
           <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
-        <p class="micro">Avaliação personalizada, sem compromisso.</p>
-      </div>
-      <div class="benefits" aria-label="Benefícios">
-        <span>Controle</span><span>Tranquilidade</span><span>Confiança</span><span>Responsabilidade</span>
+        <a href="#servicos" class="btn btn-outline btn-lg">Ver serviços</a>
       </div>
     </div>
     <div class="hero-photo">
-      <div class="frame" role="img" aria-label="Foto real de equipe uniformizada em postura de trabalho">
-        <span class="ph-label">foto real de equipe uniformizada em postura de trabalho</span>
+      <div class="frame">
+        <img src="${equipeImg}" alt="Equipe Gisa uniformizada em postura de trabalho, com rádio e crachá" loading="eager" />
       </div>
       <div class="badge" aria-hidden="true">
         <span class="num">30+</span>
@@ -458,6 +491,19 @@ const BODY_HTML = `
     </div>
   </div>
 </section>
+
+<div class="marquee" aria-label="Benefícios">
+  <div class="marquee-track" id="marqueeTrack">
+    <span class="m-item"><span class="dot"></span>Controle</span>
+    <span class="m-item"><span class="dot"></span>Tranquilidade</span>
+    <span class="m-item"><span class="dot"></span>Confiança</span>
+    <span class="m-item"><span class="dot"></span>Responsabilidade</span>
+    <span class="m-item"><span class="dot"></span>Controle</span>
+    <span class="m-item"><span class="dot"></span>Tranquilidade</span>
+    <span class="m-item"><span class="dot"></span>Confiança</span>
+    <span class="m-item"><span class="dot"></span>Responsabilidade</span>
+  </div>
+</div>
 
 <section class="logos" aria-label="Quem confia na operação da Gisa">
   <div class="container">
@@ -495,7 +541,6 @@ const BODY_HTML = `
 <section class="diag">
   <div class="container">
     <div class="head">
-      <span class="eyebrow">Diagnóstico</span>
       <h2>Você comanda o dia a dia ou apaga incêndio em todos eles?</h2>
       <p class="lead sub">Cada frente atende por um contato diferente, um padrão diferente. Funciona enquanto você está em cima. Quando você precisa cuidar de outra coisa, alguma frente afrouxa.</p>
     </div>
@@ -509,6 +554,11 @@ const BODY_HTML = `
       <div class="scene"><span class="ico"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M1 17h2V7h11v10h2M16 17h2l3-4v-2h-5M5 21a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM18 21a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/></svg></span><p>Caminhão de carga parado na portaria porque a triagem é manual</p></div>
     </div>
     <p class="close">A equipe está fazendo o que foi treinada pra fazer. O problema não é nenhuma frente isolada. É a operação inteira tratada como peças soltas.</p>
+    <div class="section-cta">
+      <a href="#form" class="btn btn-primary btn-lg">Quero um diagnóstico do meu prédio
+        <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
   </div>
 </section>
 
@@ -541,22 +591,32 @@ const BODY_HTML = `
         <p>Proteção patrimonial por meio de rondas programadas e presença ativa no perímetro. Profissionais treinados para observar, registrar e acionar quando necessário.</p>
       </article>
     </div>
+    <div class="section-cta">
+      <a href="#form" class="btn btn-primary btn-lg">Solicitar proposta de serviços
+        <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
   </div>
 </section>
 
 <section class="fund" id="fundador">
   <div class="container fund-grid">
     <div class="fund-photo">
-      <div class="frame" role="img" aria-label="Foto real do Lawrence ou da equipe operando">
-        <span class="ph-label">foto real do Lawrence ou da equipe operando</span>
+      <div class="frame">
+        <img src="${lawrenceImg}" alt="Lawrence Vale em frente a uma operação Gisa no Rio de Janeiro" loading="lazy" />
       </div>
     </div>
     <div class="fund-text">
-      <span class="eyebrow">Fundador</span>
-      <h2>Conheça o fundador</h2>
+      <span class="eyebrow">Quem está por trás</span>
+      <h2>Conheça o Lawrence</h2>
       <p>Lawrence Vale começou no setor de facilities aos 15 anos, acompanhando o pai na empresa dele. Hoje soma mais de 30 anos de experiência operando prédios de todo tipo no Rio de Janeiro, à frente da sua própria empresa.</p>
       <p>A Gisa nasceu dessa trajetória consolidada e foi estruturada para tratar facilities como uma operação única, com cultura e supervisão consistentes.</p>
-      <div class="sig"><span class="av" aria-hidden="true"></span><span>Lawrence Vale, fundador</span></div>
+      <div class="sig"><span class="av" aria-hidden="true"></span><span>Lawrence Vale</span></div>
+      <div class="cta-row">
+        <a href="#form" class="btn btn-primary">Falar com o Lawrence
+          <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
     </div>
   </div>
 </section>
@@ -564,7 +624,6 @@ const BODY_HTML = `
 <section class="plano">
   <div class="container">
     <div class="head">
-      <span class="eyebrow">Processo</span>
       <h2>Como funciona o início da operação com a Gisa</h2>
       <p class="lead sub">Três etapas, do diagnóstico inicial ao primeiro turno em funcionamento.</p>
     </div>
@@ -585,13 +644,17 @@ const BODY_HTML = `
         <p>A Gisa assume o dia a dia com equipe alocada, supervisor designado e canal direto de comunicação. A partir desse ponto, a operação passa a ter um único responsável.</p>
       </div>
     </div>
+    <div class="section-cta">
+      <a href="#form" class="btn btn-primary btn-lg">Começar pela avaliação gratuita
+        <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
   </div>
 </section>
 
 <section class="transf">
   <div class="container">
     <div class="head">
-      <span class="eyebrow">Transformação</span>
       <h2>O que muda na sua rotina quando a Gisa assume a operação</h2>
     </div>
     <div class="transf-grid">
@@ -610,20 +673,31 @@ const BODY_HTML = `
         <p>O dia a dia deixa de ser uma sucessão de incêndios a apagar e passa a operar dentro de um padrão definido. Você deixa de gerenciar fornecedores soltos e passa a administrar de fato, com tempo e clareza para decidir o que importa.</p>
       </div>
     </div>
+    <div class="section-cta">
+      <a href="#form" class="btn btn-primary btn-lg">Quero essa rotina no meu prédio
+        <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
   </div>
 </section>
 
 <section id="form">
   <div class="container cta-grid">
     <div class="cta-text">
+      <span class="eyebrow">Avaliação gratuita</span>
       <h2>Sua operação merece um padrão único. Comece pela avaliação gratuita.</h2>
-      <p class="sub">Preencha abaixo. Em até 1 dia útil, nossa equipe entra em contato pelo WhatsApp para agendar a visita.</p>
+      <p class="sub">Preencha ao lado. Em até 1 dia útil, nossa equipe entra em contato pelo WhatsApp para agendar a visita.</p>
+      <ul class="cta-bullets">
+        <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Visita ao local, sem custo</li>
+        <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Diagnóstico escrito dos pontos críticos</li>
+        <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Sem compromisso de contratação</li>
+      </ul>
     </div>
     <form class="form-card" id="leadForm" novalidate aria-label="Solicitar avaliação gratuita">
       <h3>Avaliação gratuita</h3>
       <div class="field" data-field="nome">
         <label for="f-nome">Nome</label>
-        <input id="f-nome" name="nome" type="text" autocomplete="name" placeholder="Seu nome completo" required maxlength="100" />
+        <input id="f-nome" name="nome" type="text" autocomplete="name" placeholder="Seu nome completo…" required maxlength="100" />
         <span class="err">Informe seu nome.</span>
       </div>
       <div class="field" data-field="whatsapp">
@@ -647,7 +721,6 @@ const BODY_HTML = `
       </div>
       <div class="submit-row">
         <button type="submit" class="btn btn-primary btn-lg">Quero uma avaliação gratuita</button>
-        <p class="micro">Prefere falar direto? WhatsApp (21)&nbsp;96462-8256.</p>
       </div>
       <p class="sr" aria-live="polite" id="formStatus" style="position:absolute;left:-9999px"></p>
     </form>
@@ -657,7 +730,6 @@ const BODY_HTML = `
 <section class="faq" id="faq">
   <div class="container">
     <div class="head">
-      <span class="eyebrow">Dúvidas frequentes</span>
       <h2>Perguntas frequentes</h2>
     </div>
     <div class="faq-list">
@@ -667,6 +739,11 @@ const BODY_HTML = `
       <details class="qa"><summary>Posso contratar só uma frente em vez das quatro?<span class="ic" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="ans">Pode. A operação integrada é o que a Gisa entrega melhor, mas é comum começar por uma frente (portaria, em geral) e expandir conforme a relação amadurece.</div></details>
       <details class="qa"><summary>Vocês atendem qual região do Rio de Janeiro?<span class="ic" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="ans">A Gisa atende todo o estado do Rio de Janeiro. Com sede em Campo Grande, operamos em condomínios e operações corporativas em diferentes regiões.</div></details>
       <details class="qa"><summary>O que está incluído na avaliação gratuita?<span class="ic" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="ans">Visita ao local, conversa com o responsável e análise das frentes que fazem sentido pra você. Sem compromisso de contratação.</div></details>
+    </div>
+    <div class="section-cta">
+      <a href="#form" class="btn btn-primary btn-lg">Ainda tenho dúvidas, quero conversar
+        <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
     </div>
   </div>
 </section>
@@ -678,7 +755,6 @@ const BODY_HTML = `
       <a href="#form" class="btn btn-primary btn-lg">Quero uma avaliação gratuita
         <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
-      <p class="micro">Prefere falar direto? WhatsApp (21)&nbsp;96462-8256.</p>
     </div>
   </div>
 </section>
@@ -700,7 +776,7 @@ const BODY_HTML = `
           <a href="#hero">Início</a>
           <a href="#servicos">Serviços</a>
           <a href="#fundador">Sobre</a>
-          <a href="#faq">Dúvidas frequentes</a>
+          <a href="#faq">Perguntas frequentes</a>
         </div>
       </div>
       <div class="col">
@@ -735,7 +811,7 @@ export const Route = createFileRoute("/")({
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap",
       },
     ],
   }),
