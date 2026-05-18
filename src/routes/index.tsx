@@ -78,39 +78,57 @@ const STYLES = `
   .gisa .hl-gold{color:var(--accent-dark);font-weight:800}
   .gisa .hl-red{color:#B23A3A;font-weight:800}
 
+  @property --gisa-angle{ syntax:"<angle>"; initial-value:0deg; inherits:false; }
+  @keyframes gisaSpin{ to { --gisa-angle: 360deg; } }
+  @keyframes gisaShine{ 0%{ transform:translateX(-110%);} 60%,100%{ transform:translateX(110%);} }
+
   .gisa .btn{
     position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;
     padding:14px 22px;border-radius:999px;font-weight:700;font-size:15px;
-    transition:transform .25s var(--ease), box-shadow .3s var(--ease), filter .25s var(--ease), background-position .5s var(--ease);
-    will-change:transform;white-space:nowrap;isolation:isolate;border:1px solid transparent;
+    transition:transform .25s var(--ease), box-shadow .3s var(--ease), filter .25s var(--ease);
+    will-change:transform;white-space:nowrap;isolation:isolate;border:0;overflow:hidden;
+  }
+  .gisa .btn::before{
+    content:"";position:absolute;inset:0;border-radius:inherit;padding:2px;
+    background:conic-gradient(from var(--gisa-angle), #584827 0%, #c7a03c 25%, #f9de90 32%, #c7a03c 42%, #584827 55%, #c7a03c 75%, #f9de90 82%, #c7a03c 92%, #584827 100%);
+    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor; mask-composite:exclude;
+    animation:gisaSpin 5s linear infinite;pointer-events:none;z-index:2;
   }
   .gisa .btn-primary{
     background:linear-gradient(135deg, #E5BE78 0%, var(--accent) 45%, var(--accent-dark) 100%);
-    background-size:200% 100%;background-position:0% 50%;
-    color:#091E2D;border-color:rgba(184,149,86,.55);
+    color:#091E2D;
     box-shadow:0 10px 24px -10px rgba(184,149,86,.55), inset 0 1px 0 rgba(255,255,255,.45);
   }
-  .gisa .btn-primary:hover{transform:translateY(-2px);background-position:100% 50%;box-shadow:0 18px 36px -12px rgba(184,149,86,.65), inset 0 1px 0 rgba(255,255,255,.55)}
+  .gisa .btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 36px -12px rgba(184,149,86,.7), inset 0 1px 0 rgba(255,255,255,.55)}
   .gisa .btn-primary:active{transform:translateY(0)}
   .gisa .btn-primary::after{
-    content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
-    background:linear-gradient(110deg, transparent 30%, rgba(255,255,255,.55) 50%, transparent 70%);
-    transform:translateX(-120%);transition:transform .7s var(--ease);mix-blend-mode:overlay;
+    content:"";position:absolute;top:0;bottom:0;left:0;width:55%;border-radius:inherit;pointer-events:none;
+    background:linear-gradient(110deg, transparent 0%, rgba(255,255,255,.6) 50%, transparent 100%);
+    transform:translateX(-110%);mix-blend-mode:overlay;z-index:1;
   }
-  .gisa .btn-primary:hover::after{transform:translateX(120%)}
-  .gisa .btn-primary svg{transition:transform .25s var(--ease)}
+  .gisa .btn-primary:hover::after{animation:gisaShine .9s var(--ease) forwards}
+  .gisa .btn-primary svg{position:relative;z-index:3;transition:transform .25s var(--ease)}
   .gisa .btn-primary:hover svg{transform:translateX(3px)}
+  .gisa .btn-primary > *{position:relative;z-index:3}
   .gisa .btn-outline{
     background:linear-gradient(180deg,#fff,#FAF8F2);color:var(--text);
-    border:1px solid var(--border-strong);box-shadow:0 4px 14px -8px rgba(9,30,45,.15);
+    box-shadow:0 4px 14px -8px rgba(9,30,45,.15);
   }
-  .gisa .btn-outline:hover{transform:translateY(-2px);border-color:var(--petroleo);box-shadow:0 12px 24px -12px rgba(19,110,138,.35)}
+  .gisa .btn-outline:hover{transform:translateY(-2px);box-shadow:0 12px 24px -12px rgba(19,110,138,.35)}
+  .gisa .btn-outline > *{position:relative;z-index:3}
   .gisa .btn-outline-light{
-    background:rgba(255,255,255,.04);color:#fff;border:1px solid rgba(255,255,255,.25);
+    background:rgba(255,255,255,.04);color:#fff;
     backdrop-filter:blur(6px);
   }
-  .gisa .btn-outline-light:hover{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.55);transform:translateY(-2px)}
+  .gisa .btn-outline-light:hover{background:rgba(255,255,255,.10);transform:translateY(-2px)}
+  .gisa .btn-outline-light > *{position:relative;z-index:3}
   .gisa .btn-lg{padding:18px 28px;font-size:16px}
+  @media (prefers-reduced-motion: reduce){
+    .gisa .btn::before{animation:none}
+    .gisa .btn-primary:hover::after{animation:none}
+  }
 
   .gisa .micro{margin-top:12px;font-size:13.5px;color:var(--text-muted)}
 
@@ -182,13 +200,19 @@ const STYLES = `
     box-shadow:var(--shadow-lg);
   }
   .gisa .hero-photo .frame img{width:100%;height:100%;object-fit:cover}
+  .gisa .hero-photo .frame::after{
+    content:"";position:absolute;left:0;right:0;bottom:14%;height:22%;
+    backdrop-filter:blur(14px) saturate(.9);-webkit-backdrop-filter:blur(14px) saturate(.9);
+    background:linear-gradient(180deg, rgba(9,30,45,0) 0%, rgba(9,30,45,.18) 100%);
+    pointer-events:none;z-index:2;
+  }
   .gisa .hero-photo .badge{
-    position:absolute;top:24px;right:-12px;z-index:3;
-    background:#fff;border:1px solid var(--border);box-shadow:var(--shadow);
+    position:absolute;left:50%;bottom:14%;transform:translate(-50%, 50%);z-index:4;
+    background:#fff;border:1px solid var(--border);box-shadow:var(--shadow-lg);
     padding:14px 18px;border-radius:14px;display:flex;align-items:center;gap:12px;
   }
   .gisa .hero-photo .badge .num{font-size:28px;font-weight:800;color:var(--petroleo);letter-spacing:-.03em}
-  .gisa .hero-photo .badge .lab{font-size:12px;color:var(--text-muted);line-height:1.2;max-width:120px;font-weight:500}
+  .gisa .hero-photo .badge .lab{font-size:12px;color:var(--text-muted);line-height:1.2;max-width:140px;font-weight:500}
 
   @keyframes gisaRise{to{opacity:1;transform:translateY(0)}}
 
@@ -743,7 +767,7 @@ const BODY_HTML = `
       <h2>Conheça o Lawrence</h2>
       <p>Lawrence Vale começou no setor de facilities aos 15 anos, acompanhando o pai na empresa dele. Hoje soma mais de 30 anos de experiência operando prédios de todo tipo no Rio de Janeiro, à frente da sua própria empresa.</p>
       <p>A Gisa nasceu dessa trajetória consolidada e foi estruturada para tratar facilities como uma operação única, com cultura e supervisão consistentes.</p>
-      <div class="sig"><span class="av" aria-hidden="true"></span><span>Lawrence Vale</span></div>
+      
       <div class="cta-row">
         <a href="https://wa.me/5521964628256" target="_blank" rel="noopener" class="btn btn-primary">Conversar pelo WhatsApp
           <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -871,11 +895,6 @@ const BODY_HTML = `
       <details class="qa"><summary>Posso contratar só uma frente em vez das quatro?<span class="ic" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="ans">Pode. A operação integrada é o que a Gisa entrega melhor, mas é comum começar por uma frente (portaria, em geral) e expandir conforme a relação amadurece.</div></details>
       <details class="qa"><summary>Vocês atendem qual região do Rio de Janeiro?<span class="ic" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="ans">A Gisa atende todo o estado do Rio de Janeiro. Com sede em Campo Grande, operamos em condomínios e operações corporativas em diferentes regiões.</div></details>
       <details class="qa"><summary>O que está incluído na avaliação gratuita?<span class="ic" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="ans">Visita ao local, conversa com o responsável e análise das frentes que fazem sentido pra você. Sem compromisso de contratação.</div></details>
-    </div>
-    <div class="section-cta">
-      <a href="#form" class="btn btn-primary btn-lg">Ainda tenho dúvidas, quero conversar
-        <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
     </div>
   </div>
 </section>
