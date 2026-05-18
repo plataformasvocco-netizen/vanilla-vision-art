@@ -756,7 +756,7 @@ const BODY_HTML = `
 <section class="plano">
   <div class="container">
     <div class="head">
-      <h2>Como funciona o início da operação com a Gisa</h2>
+      <h2>Como funciona o <span class="hl">início da operação</span> com a Gisa</h2>
       <p class="lead sub">Três etapas, do diagnóstico inicial ao primeiro turno em funcionamento.</p>
     </div>
     <div class="steps">
