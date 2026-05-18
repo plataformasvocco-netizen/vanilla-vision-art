@@ -767,7 +767,7 @@ const BODY_HTML = `
       <h2>Conheça o Lawrence</h2>
       <p>Lawrence Vale começou no setor de facilities aos 15 anos, acompanhando o pai na empresa dele. Hoje soma mais de 30 anos de experiência operando prédios de todo tipo no Rio de Janeiro, à frente da sua própria empresa.</p>
       <p>A Gisa nasceu dessa trajetória consolidada e foi estruturada para tratar facilities como uma operação única, com cultura e supervisão consistentes.</p>
-      <div class="sig"><span class="av" aria-hidden="true"></span><span>Lawrence Vale</span></div>
+      
       <div class="cta-row">
         <a href="https://wa.me/5521964628256" target="_blank" rel="noopener" class="btn btn-primary">Conversar pelo WhatsApp
           <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
