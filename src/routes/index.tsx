@@ -70,23 +70,46 @@ const STYLES = `
   .gisa p{margin:0}
   .gisa .lead{font-size:clamp(16px,1.3vw,18px);color:var(--text-muted);line-height:1.6;text-wrap:pretty;font-weight:400}
 
+  .gisa .hl{
+    background:linear-gradient(120deg, rgba(210,172,103,.0) 0%, rgba(210,172,103,.35) 40%, rgba(210,172,103,.35) 60%, rgba(210,172,103,.0) 100%);
+    background-size:100% 38%;background-repeat:no-repeat;background-position:0 88%;
+    padding:0 .06em;border-radius:2px;color:var(--petroleo);font-weight:800;
+  }
+  .gisa .hl-gold{color:var(--accent-dark);font-weight:800}
+  .gisa .hl-red{color:#B23A3A;font-weight:800}
+
   .gisa .btn{
-    display:inline-flex;align-items:center;justify-content:center;gap:10px;
+    position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;
     padding:14px 22px;border-radius:999px;font-weight:700;font-size:15px;
-    transition:transform .25s var(--ease), background-color .2s var(--ease), color .2s var(--ease), box-shadow .25s var(--ease);
-    will-change:transform;white-space:nowrap;
+    transition:transform .25s var(--ease), box-shadow .3s var(--ease), filter .25s var(--ease), background-position .5s var(--ease);
+    will-change:transform;white-space:nowrap;isolation:isolate;border:1px solid transparent;
   }
-  .gisa .btn-primary{background:var(--accent);color:var(--text);box-shadow:var(--shadow)}
-  .gisa .btn-primary:hover{background:var(--accent-dark);transform:translateY(-1px);box-shadow:var(--shadow-lg)}
+  .gisa .btn-primary{
+    background:linear-gradient(135deg, #E5BE78 0%, var(--accent) 45%, var(--accent-dark) 100%);
+    background-size:200% 100%;background-position:0% 50%;
+    color:#091E2D;border-color:rgba(184,149,86,.55);
+    box-shadow:0 10px 24px -10px rgba(184,149,86,.55), inset 0 1px 0 rgba(255,255,255,.45);
+  }
+  .gisa .btn-primary:hover{transform:translateY(-2px);background-position:100% 50%;box-shadow:0 18px 36px -12px rgba(184,149,86,.65), inset 0 1px 0 rgba(255,255,255,.55)}
   .gisa .btn-primary:active{transform:translateY(0)}
+  .gisa .btn-primary::after{
+    content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+    background:linear-gradient(110deg, transparent 30%, rgba(255,255,255,.55) 50%, transparent 70%);
+    transform:translateX(-120%);transition:transform .7s var(--ease);mix-blend-mode:overlay;
+  }
+  .gisa .btn-primary:hover::after{transform:translateX(120%)}
+  .gisa .btn-primary svg{transition:transform .25s var(--ease)}
+  .gisa .btn-primary:hover svg{transform:translateX(3px)}
   .gisa .btn-outline{
-    background:transparent;color:var(--text);border:1px solid var(--border-strong);
+    background:linear-gradient(180deg,#fff,#FAF8F2);color:var(--text);
+    border:1px solid var(--border-strong);box-shadow:0 4px 14px -8px rgba(9,30,45,.15);
   }
-  .gisa .btn-outline:hover{background:var(--bg-alt);border-color:var(--text)}
+  .gisa .btn-outline:hover{transform:translateY(-2px);border-color:var(--petroleo);box-shadow:0 12px 24px -12px rgba(19,110,138,.35)}
   .gisa .btn-outline-light{
-    background:transparent;color:#fff;border:1px solid rgba(255,255,255,.25);
+    background:rgba(255,255,255,.04);color:#fff;border:1px solid rgba(255,255,255,.25);
+    backdrop-filter:blur(6px);
   }
-  .gisa .btn-outline-light:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.5)}
+  .gisa .btn-outline-light:hover{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.55);transform:translateY(-2px)}
   .gisa .btn-lg{padding:18px 28px;font-size:16px}
 
   .gisa .micro{margin-top:12px;font-size:13.5px;color:var(--text-muted)}
