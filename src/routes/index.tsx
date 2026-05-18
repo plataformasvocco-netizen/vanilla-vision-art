@@ -818,7 +818,7 @@ const BODY_HTML = `
     <div class="cta-text">
       <span class="eyebrow">Avaliação gratuita</span>
       <h2>Sua operação merece um padrão único. Comece pela avaliação gratuita.</h2>
-      <p class="sub">Preencha ao lado. Em até 1 dia útil, nossa equipe entra em contato pelo WhatsApp para agendar a visita.</p>
+      <p class="sub">Preencha o formulário e a nossa equipe entrará em contato o quanto antes pelo WhatsApp para agendar a visita.</p>
       <ul class="cta-bullets">
         <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Visita ao local, sem custo</li>
         <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Diagnóstico escrito dos pontos críticos</li>
