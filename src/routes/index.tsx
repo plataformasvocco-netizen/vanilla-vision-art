@@ -6,6 +6,7 @@ import svcPortariaImg from "@/assets/svc-portaria.jpg";
 import svcLimpezaImg from "@/assets/svc-limpeza.jpg";
 import svcControleImg from "@/assets/svc-controle.jpg";
 import svcVigiaImg from "@/assets/svc-vigia.jpg";
+import logoGisa from "@/assets/logo-gisa.png";
 
 const STYLES = `
   :root{
@@ -575,6 +576,12 @@ const STYLES = `
     html{scroll-behavior:auto}
   }
 
+  /* Logo da marca (substitui texto Gisa) */
+  .gisa .nav .logo img{display:block;height:36px;width:auto}
+  @media (max-width:640px){
+    .gisa .nav .logo img{height:32px}
+  }
+
   /* WhatsApp FAB (floating action button) */
   .zap-fab{position:fixed;bottom:20px;right:20px;width:56px;height:56px;border-radius:50%;background:#25D366;color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(9,30,45,.25);z-index:100;transition:transform .2s ease, box-shadow .2s ease;text-decoration:none}
   .zap-fab:hover{transform:scale(1.05);box-shadow:0 10px 28px rgba(37,211,102,.4)}
@@ -590,7 +597,7 @@ const STYLES = `
 const BODY_HTML = `
 <header class="nav" id="nav">
   <div class="container nav-inner">
-    <a href="#hero" class="logo" aria-label="Gisa, página inicial">Gisa<span class="dot">.</span></a>
+    <a href="#hero" class="logo" aria-label="Gisa, página inicial"><img src="${logoGisa}" alt="Gisa" /></a>
     <nav class="nav-links" id="navLinks" aria-label="Navegação principal">
       <a href="#hero">Início</a>
       <a href="#servicos">Serviços</a>
