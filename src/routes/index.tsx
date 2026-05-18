@@ -683,24 +683,44 @@ const BODY_HTML = `
     </div>
     <div class="cards-4">
       <article class="svc">
-        <span class="ico"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 4 4 6v15h6v-6h4v6h6V10"/><path d="M13 4v17"/><circle cx="11" cy="12" r=".8" fill="currentColor"/></svg></span>
-        <h3>Portaria e recepção</h3>
-        <p>Identificam, autorizam e registram a entrada de moradores, visitantes, prestadores e fornecedores. Gerenciam o fluxo do prédio, recebem encomendas e são o primeiro ponto de contato de quem chega.</p>
+        <div class="photo">
+          <img src="${svcPortariaImg}" alt="Porteiro Gisa em frente a portaria de condomínio" loading="lazy" width="800" height="600" />
+          <span class="ico"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 4 4 6v15h6v-6h4v6h6V10"/><path d="M13 4v17"/><circle cx="11" cy="12" r=".8" fill="currentColor"/></svg></span>
+        </div>
+        <div class="body">
+          <h3>Portaria e recepção</h3>
+          <p>Identificam, autorizam e registram a entrada de moradores, visitantes, prestadores e fornecedores. Gerenciam o fluxo do prédio, recebem encomendas e são o primeiro ponto de contato de quem chega.</p>
+        </div>
       </article>
       <article class="svc">
-        <span class="ico"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/></svg></span>
-        <h3>Limpeza</h3>
-        <p>Conservação e higienização das áreas comuns com rotina adaptada a cada tipo de espaço. Procedimentos definidos por frequência, tipo de superfície e perfil de uso do ambiente.</p>
+        <div class="photo">
+          <img src="${svcLimpezaImg}" alt="Equipe de limpeza Gisa em frente a condomínio" loading="lazy" width="800" height="600" />
+          <span class="ico"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/></svg></span>
+        </div>
+        <div class="body">
+          <h3>Limpeza</h3>
+          <p>Conservação e higienização das áreas comuns com rotina adaptada a cada tipo de espaço. Procedimentos definidos por frequência, tipo de superfície e perfil de uso do ambiente.</p>
+        </div>
       </article>
       <article class="svc">
-        <span class="ico"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 12h10"/></svg></span>
-        <h3>Controle de acesso</h3>
-        <p>Monitoramento e gestão dos pontos críticos de entrada: garagem, área de carga, serviços e perímetro externo. Cada acesso opera com procedimento próprio, por turno e perfil de entrada.</p>
+        <div class="photo">
+          <img src="${svcControleImg}" alt="Profissional Gisa em controle de acesso com rádio" loading="lazy" width="800" height="600" />
+          <span class="ico"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 12h10"/></svg></span>
+        </div>
+        <div class="body">
+          <h3>Controle de acesso</h3>
+          <p>Monitoramento e gestão dos pontos críticos de entrada: garagem, área de carga, serviços e perímetro externo. Cada acesso opera com procedimento próprio, por turno e perfil de entrada.</p>
+        </div>
       </article>
       <article class="svc">
-        <span class="ico"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16a2 2 0 1 0 4 0c0-1-.5-1.8-1-3l-1-3a2 2 0 1 1 4 0v6M14 16a2 2 0 1 0 4 0c0-1-.5-1.8-1-3l-1-3a2 2 0 1 1 4 0v6"/></svg></span>
-        <h3>Vigia</h3>
-        <p>Proteção patrimonial por meio de rondas programadas e presença ativa no perímetro. Profissionais treinados para observar, registrar e acionar quando necessário.</p>
+        <div class="photo">
+          <img src="${svcVigiaImg}" alt="Vigia Gisa fazendo registro de ronda" loading="lazy" width="800" height="600" />
+          <span class="ico"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16a2 2 0 1 0 4 0c0-1-.5-1.8-1-3l-1-3a2 2 0 1 1 4 0v6M14 16a2 2 0 1 0 4 0c0-1-.5-1.8-1-3l-1-3a2 2 0 1 1 4 0v6"/></svg></span>
+        </div>
+        <div class="body">
+          <h3>Vigia</h3>
+          <p>Proteção patrimonial por meio de rondas programadas e presença ativa no perímetro. Profissionais treinados para observar, registrar e acionar quando necessário.</p>
+        </div>
       </article>
     </div>
     <div class="section-cta">
