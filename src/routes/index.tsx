@@ -212,7 +212,17 @@ const STYLES = `
     display:inline-flex;align-items:center;gap:14px;
     font-size:18px;font-weight:600;letter-spacing:-.01em;color:#fff;white-space:nowrap;
   }
-  .gisa .m-item .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex:none;box-shadow:0 0 0 6px rgba(210,172,103,.12)}
+  .gisa .m-item .dot{
+    width:9px;height:9px;border-radius:50%;background:var(--accent);flex:none;
+    box-shadow:0 0 0 6px rgba(210,172,103,.10);
+    animation:gisaDot 2.4s ease-in-out infinite;
+  }
+  .gisa .m-item:nth-child(2n) .dot{animation-delay:.6s}
+  .gisa .m-item:nth-child(3n) .dot{animation-delay:1.2s}
+  @keyframes gisaDot{
+    0%,100%{transform:scale(.7);box-shadow:0 0 0 0 rgba(210,172,103,.45)}
+    50%{transform:scale(1.15);box-shadow:0 0 0 10px rgba(210,172,103,0)}
+  }
   @keyframes gisaMarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
   .gisa .logos{background:var(--bg-alt);padding:64px 0;border-bottom:1px solid var(--border)}
