@@ -896,11 +896,6 @@ const BODY_HTML = `
       <details class="qa"><summary>Vocês atendem qual região do Rio de Janeiro?<span class="ic" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="ans">A Gisa atende todo o estado do Rio de Janeiro. Com sede em Campo Grande, operamos em condomínios e operações corporativas em diferentes regiões.</div></details>
       <details class="qa"><summary>O que está incluído na avaliação gratuita?<span class="ic" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="ans">Visita ao local, conversa com o responsável e análise das frentes que fazem sentido pra você. Sem compromisso de contratação.</div></details>
     </div>
-    <div class="section-cta">
-      <a href="#form" class="btn btn-primary btn-lg">Ainda tenho dúvidas, quero conversar
-        <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
-    </div>
   </div>
 </section>
 
