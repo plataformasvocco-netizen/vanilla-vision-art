@@ -254,24 +254,37 @@ const STYLES = `
   }
   .gisa .stat .lab{margin-top:12px;color:var(--text-muted);font-size:15px;font-weight:500}
 
+  .gisa .diag{position:relative;isolation:isolate}
+  .gisa .diag::before{
+    content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+    background:
+      radial-gradient(50% 40% at 50% 0%, rgba(178,58,58,.08), transparent 70%),
+      radial-gradient(40% 50% at 10% 90%, rgba(210,172,103,.08), transparent 70%);
+  }
   .gisa .diag .head{text-align:center;max-width:780px;margin-inline:auto;margin-bottom:48px}
   .gisa .diag h2{margin-top:14px}
   .gisa .diag .sub{margin-top:18px;text-wrap:pretty}
   .gisa .diag .subhead{
-    text-align:center;font-weight:700;color:var(--petroleo);font-size:14px;
+    text-align:center;font-weight:700;color:#B23A3A;font-size:14px;
     letter-spacing:.06em;text-transform:uppercase;margin:8px 0 28px;
   }
   .gisa .scenes{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 28px;max-width:980px;margin:0 auto}
   @media (max-width:760px){.gisa .scenes{grid-template-columns:1fr}}
   .gisa .scene{
-    display:flex;gap:14px;align-items:flex-start;
-    padding:18px 18px;border-radius:14px;border:1px solid var(--border);
-    background:#fff;transition:border-color .2s var(--ease), transform .2s var(--ease), box-shadow .2s var(--ease);
+    position:relative;display:flex;gap:14px;align-items:flex-start;
+    padding:18px 18px;border-radius:14px;border:1px solid rgba(178,58,58,.18);
+    background:linear-gradient(180deg, #FFF8F6 0%, #FFFCFB 100%);
+    transition:border-color .25s var(--ease), transform .25s var(--ease), box-shadow .25s var(--ease);
+    overflow:hidden;
   }
-  .gisa .scene:hover{border-color:var(--border-strong);transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+  .gisa .scene::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
+    background:linear-gradient(180deg, #C44 0%, rgba(178,58,58,.2) 100%);
+  }
+  .gisa .scene:hover{border-color:rgba(178,58,58,.45);transform:translateY(-2px);box-shadow:0 18px 30px -20px rgba(178,58,58,.35)}
   .gisa .scene .ico{
     flex:none;width:36px;height:36px;border-radius:10px;
-    background:rgba(210,172,103,.15);color:var(--accent-dark);
+    background:rgba(178,58,58,.10);color:#B23A3A;
     display:flex;align-items:center;justify-content:center;
   }
   .gisa .scene p{font-size:15.5px;color:var(--text);line-height:1.5}
