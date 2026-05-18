@@ -787,7 +787,7 @@ const BODY_HTML = `
 <section class="transf">
   <div class="container">
     <div class="head">
-      <h2>O que muda na sua rotina quando a Gisa assume a operação</h2>
+      <h2>O que <span class="hl">muda na sua rotina</span> quando a Gisa assume a operação</h2>
     </div>
     <div class="transf-grid">
       <div class="tcol antes">
