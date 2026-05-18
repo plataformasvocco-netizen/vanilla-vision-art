@@ -583,8 +583,8 @@ const BODY_HTML = `
   <div class="container hero-grid">
     <div class="hero-text">
       <span class="eyebrow">Facilities no Rio de Janeiro</span>
-      <h1>Portaria, limpeza, controle de acesso e vigia da sua operação sob uma única cultura de segurança.</h1>
-      <p class="lead">Mais de 30 anos no setor de facilities, atendendo condomínios residenciais e operações corporativas no Rio de Janeiro.</p>
+      <h1>Portaria, limpeza, controle de acesso e vigia da sua operação sob uma <span class="hl">única cultura de segurança</span>.</h1>
+      <p class="lead"><span class="hl-gold">Mais de 30 anos</span> no setor de facilities, atendendo condomínios residenciais e operações corporativas no <span class="hl-gold">Rio de Janeiro</span>.</p>
       <div class="cta-row">
         <a href="#form" class="btn btn-primary btn-lg">Quero uma avaliação gratuita
           <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
