@@ -2,6 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 import equipeImg from "@/assets/equipe.jpg";
 import lawrenceImg from "@/assets/lawrence.jpg";
+import svcPortariaImg from "@/assets/svc-portaria.jpg";
+import svcLimpezaImg from "@/assets/svc-limpeza.jpg";
+import svcControleImg from "@/assets/svc-controle.jpg";
+import svcVigiaImg from "@/assets/svc-vigia.jpg";
 
 const STYLES = `
   :root{
@@ -66,23 +70,46 @@ const STYLES = `
   .gisa p{margin:0}
   .gisa .lead{font-size:clamp(16px,1.3vw,18px);color:var(--text-muted);line-height:1.6;text-wrap:pretty;font-weight:400}
 
+  .gisa .hl{
+    background:linear-gradient(120deg, rgba(210,172,103,.0) 0%, rgba(210,172,103,.35) 40%, rgba(210,172,103,.35) 60%, rgba(210,172,103,.0) 100%);
+    background-size:100% 38%;background-repeat:no-repeat;background-position:0 88%;
+    padding:0 .06em;border-radius:2px;color:var(--petroleo);font-weight:800;
+  }
+  .gisa .hl-gold{color:var(--accent-dark);font-weight:800}
+  .gisa .hl-red{color:#B23A3A;font-weight:800}
+
   .gisa .btn{
-    display:inline-flex;align-items:center;justify-content:center;gap:10px;
+    position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;
     padding:14px 22px;border-radius:999px;font-weight:700;font-size:15px;
-    transition:transform .25s var(--ease), background-color .2s var(--ease), color .2s var(--ease), box-shadow .25s var(--ease);
-    will-change:transform;white-space:nowrap;
+    transition:transform .25s var(--ease), box-shadow .3s var(--ease), filter .25s var(--ease), background-position .5s var(--ease);
+    will-change:transform;white-space:nowrap;isolation:isolate;border:1px solid transparent;
   }
-  .gisa .btn-primary{background:var(--accent);color:var(--text);box-shadow:var(--shadow)}
-  .gisa .btn-primary:hover{background:var(--accent-dark);transform:translateY(-1px);box-shadow:var(--shadow-lg)}
+  .gisa .btn-primary{
+    background:linear-gradient(135deg, #E5BE78 0%, var(--accent) 45%, var(--accent-dark) 100%);
+    background-size:200% 100%;background-position:0% 50%;
+    color:#091E2D;border-color:rgba(184,149,86,.55);
+    box-shadow:0 10px 24px -10px rgba(184,149,86,.55), inset 0 1px 0 rgba(255,255,255,.45);
+  }
+  .gisa .btn-primary:hover{transform:translateY(-2px);background-position:100% 50%;box-shadow:0 18px 36px -12px rgba(184,149,86,.65), inset 0 1px 0 rgba(255,255,255,.55)}
   .gisa .btn-primary:active{transform:translateY(0)}
+  .gisa .btn-primary::after{
+    content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+    background:linear-gradient(110deg, transparent 30%, rgba(255,255,255,.55) 50%, transparent 70%);
+    transform:translateX(-120%);transition:transform .7s var(--ease);mix-blend-mode:overlay;
+  }
+  .gisa .btn-primary:hover::after{transform:translateX(120%)}
+  .gisa .btn-primary svg{transition:transform .25s var(--ease)}
+  .gisa .btn-primary:hover svg{transform:translateX(3px)}
   .gisa .btn-outline{
-    background:transparent;color:var(--text);border:1px solid var(--border-strong);
+    background:linear-gradient(180deg,#fff,#FAF8F2);color:var(--text);
+    border:1px solid var(--border-strong);box-shadow:0 4px 14px -8px rgba(9,30,45,.15);
   }
-  .gisa .btn-outline:hover{background:var(--bg-alt);border-color:var(--text)}
+  .gisa .btn-outline:hover{transform:translateY(-2px);border-color:var(--petroleo);box-shadow:0 12px 24px -12px rgba(19,110,138,.35)}
   .gisa .btn-outline-light{
-    background:transparent;color:#fff;border:1px solid rgba(255,255,255,.25);
+    background:rgba(255,255,255,.04);color:#fff;border:1px solid rgba(255,255,255,.25);
+    backdrop-filter:blur(6px);
   }
-  .gisa .btn-outline-light:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.5)}
+  .gisa .btn-outline-light:hover{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.55);transform:translateY(-2px)}
   .gisa .btn-lg{padding:18px 28px;font-size:16px}
 
   .gisa .micro{margin-top:12px;font-size:13.5px;color:var(--text-muted)}
@@ -185,7 +212,17 @@ const STYLES = `
     display:inline-flex;align-items:center;gap:14px;
     font-size:18px;font-weight:600;letter-spacing:-.01em;color:#fff;white-space:nowrap;
   }
-  .gisa .m-item .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex:none;box-shadow:0 0 0 6px rgba(210,172,103,.12)}
+  .gisa .m-item .dot{
+    width:9px;height:9px;border-radius:50%;background:var(--accent);flex:none;
+    box-shadow:0 0 0 6px rgba(210,172,103,.10);
+    animation:gisaDot 2.4s ease-in-out infinite;
+  }
+  .gisa .m-item:nth-child(2n) .dot{animation-delay:.6s}
+  .gisa .m-item:nth-child(3n) .dot{animation-delay:1.2s}
+  @keyframes gisaDot{
+    0%,100%{transform:scale(.7);box-shadow:0 0 0 0 rgba(210,172,103,.45)}
+    50%{transform:scale(1.15);box-shadow:0 0 0 10px rgba(210,172,103,0)}
+  }
   @keyframes gisaMarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
   .gisa .logos{background:var(--bg-alt);padding:64px 0;border-bottom:1px solid var(--border)}
@@ -217,24 +254,37 @@ const STYLES = `
   }
   .gisa .stat .lab{margin-top:12px;color:var(--text-muted);font-size:15px;font-weight:500}
 
+  .gisa .diag{position:relative;isolation:isolate}
+  .gisa .diag::before{
+    content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+    background:
+      radial-gradient(50% 40% at 50% 0%, rgba(178,58,58,.08), transparent 70%),
+      radial-gradient(40% 50% at 10% 90%, rgba(210,172,103,.08), transparent 70%);
+  }
   .gisa .diag .head{text-align:center;max-width:780px;margin-inline:auto;margin-bottom:48px}
   .gisa .diag h2{margin-top:14px}
   .gisa .diag .sub{margin-top:18px;text-wrap:pretty}
   .gisa .diag .subhead{
-    text-align:center;font-weight:700;color:var(--petroleo);font-size:14px;
+    text-align:center;font-weight:700;color:#B23A3A;font-size:14px;
     letter-spacing:.06em;text-transform:uppercase;margin:8px 0 28px;
   }
   .gisa .scenes{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 28px;max-width:980px;margin:0 auto}
   @media (max-width:760px){.gisa .scenes{grid-template-columns:1fr}}
   .gisa .scene{
-    display:flex;gap:14px;align-items:flex-start;
-    padding:18px 18px;border-radius:14px;border:1px solid var(--border);
-    background:#fff;transition:border-color .2s var(--ease), transform .2s var(--ease), box-shadow .2s var(--ease);
+    position:relative;display:flex;gap:14px;align-items:flex-start;
+    padding:18px 18px;border-radius:14px;border:1px solid rgba(178,58,58,.18);
+    background:linear-gradient(180deg, #FFF8F6 0%, #FFFCFB 100%);
+    transition:border-color .25s var(--ease), transform .25s var(--ease), box-shadow .25s var(--ease);
+    overflow:hidden;
   }
-  .gisa .scene:hover{border-color:var(--border-strong);transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+  .gisa .scene::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
+    background:linear-gradient(180deg, #C44 0%, rgba(178,58,58,.2) 100%);
+  }
+  .gisa .scene:hover{border-color:rgba(178,58,58,.45);transform:translateY(-2px);box-shadow:0 18px 30px -20px rgba(178,58,58,.35)}
   .gisa .scene .ico{
     flex:none;width:36px;height:36px;border-radius:10px;
-    background:rgba(210,172,103,.15);color:var(--accent-dark);
+    background:rgba(178,58,58,.10);color:#B23A3A;
     display:flex;align-items:center;justify-content:center;
   }
   .gisa .scene p{font-size:15.5px;color:var(--text);line-height:1.5}
@@ -248,7 +298,13 @@ const STYLES = `
   }
   .gisa .section-cta{display:flex;justify-content:center;margin-top:40px}
 
-  .gisa .servicos{background:var(--bg-alt)}
+  .gisa .servicos{
+    background:
+      radial-gradient(60% 50% at 100% 0%, rgba(19,110,138,.08), transparent 70%),
+      radial-gradient(50% 50% at 0% 100%, rgba(210,172,103,.10), transparent 70%),
+      var(--bg-alt);
+    position:relative;
+  }
   .gisa .servicos .head{max-width:760px;margin-bottom:48px}
   .gisa .servicos h2{margin-top:14px}
   .gisa .servicos .sub{margin-top:14px}
@@ -256,23 +312,45 @@ const STYLES = `
   @media (max-width:1000px){.gisa .cards-4{grid-template-columns:repeat(2,1fr)}}
   @media (max-width:560px){.gisa .cards-4{grid-template-columns:1fr}}
   .gisa .svc{
-    background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);
-    padding:28px 24px;transition:transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s var(--ease);
-    display:flex;flex-direction:column;gap:14px;
+    position:relative;background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);
+    overflow:hidden;transition:transform .35s var(--ease), box-shadow .35s var(--ease), border-color .25s var(--ease);
+    display:flex;flex-direction:column;isolation:isolate;
   }
-  .gisa .svc:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:var(--border-strong)}
-  .gisa .svc .ico{
-    width:48px;height:48px;border-radius:12px;color:var(--petroleo);
-    background:rgba(19,110,138,.10);display:flex;align-items:center;justify-content:center;
+  .gisa .svc:hover{transform:translateY(-6px);box-shadow:0 30px 50px -25px rgba(9,30,45,.30);border-color:var(--accent)}
+  .gisa .svc .photo{
+    position:relative;aspect-ratio:4/3;overflow:hidden;background:#0F5870;
   }
+  .gisa .svc .photo img{
+    width:100%;height:100%;object-fit:cover;
+    transition:transform .8s var(--ease-out), filter .5s var(--ease);
+    filter:saturate(.85);
+  }
+  .gisa .svc:hover .photo img{transform:scale(1.06);filter:saturate(1.05)}
+  .gisa .svc .photo::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(180deg, rgba(9,30,45,0) 40%, rgba(9,30,45,.55) 100%);
+  }
+  .gisa .svc .photo .ico{
+    position:absolute;left:18px;bottom:14px;z-index:2;
+    width:42px;height:42px;border-radius:12px;color:#fff;
+    background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);
+    backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;
+  }
+  .gisa .svc .body{padding:24px 22px;display:flex;flex-direction:column;gap:10px;flex:1}
   .gisa .svc h3{font-size:19px}
   .gisa .svc p{color:var(--text-muted);font-size:15px;line-height:1.6}
 
-  .gisa .fund{position:relative}
-  .gisa .fund-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:64px;align-items:center}
+  .gisa .fund{
+    position:relative;
+    background:
+      radial-gradient(40% 50% at 0% 50%, rgba(19,110,138,.06), transparent 70%),
+      radial-gradient(40% 50% at 100% 100%, rgba(210,172,103,.07), transparent 70%);
+  }
+  .gisa .fund-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:56px;align-items:center}
   @media (max-width:900px){.gisa .fund-grid{grid-template-columns:1fr;gap:40px}}
+  .gisa .fund-photo{display:flex;justify-content:center}
   .gisa .fund-photo .frame{
-    aspect-ratio:4/5;border-radius:var(--radius-lg);overflow:hidden;position:relative;
+    aspect-ratio:4/5;width:100%;max-width:380px;border-radius:var(--radius-lg);overflow:hidden;position:relative;
     background:linear-gradient(160deg,#1A2F45,#091E2D);box-shadow:var(--shadow-lg);
   }
   .gisa .fund-photo .frame img{width:100%;height:100%;object-fit:cover;object-position:center 25%}
@@ -280,13 +358,17 @@ const STYLES = `
   .gisa .fund-text p{color:var(--text-muted);font-size:17px;line-height:1.65;margin-top:18px;max-width:54ch}
   .gisa .fund-text .sig{
     margin-top:28px;display:inline-flex;align-items:center;gap:14px;
-    padding:12px 16px;border-radius:999px;background:var(--bg-alt);border:1px solid var(--border);
+    padding:12px 16px;border-radius:999px;background:#fff;border:1px solid var(--border);
   }
   .gisa .fund-text .sig .av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--petroleo),var(--accent))}
   .gisa .fund-text .sig span{font-weight:700;font-size:14px}
   .gisa .fund-text .cta-row{margin-top:32px;display:flex;flex-wrap:wrap;gap:12px}
 
-  .gisa .plano{background:var(--bg-alt)}
+  .gisa .plano{
+    background:
+      radial-gradient(50% 50% at 50% 0%, rgba(19,110,138,.07), transparent 70%),
+      var(--bg-alt);
+  }
   .gisa .plano .head{max-width:760px;margin-bottom:48px}
   .gisa .plano h2{margin-top:14px}
   .gisa .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;position:relative}
@@ -298,21 +380,40 @@ const STYLES = `
   }
   @media (max-width:900px){.gisa .steps::before{display:none}}
   .gisa .step{
-    background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);
-    padding:28px 24px;position:relative;z-index:1;
-    transition:transform .25s var(--ease), box-shadow .25s var(--ease);
+    position:relative;background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);
+    padding:28px 24px;z-index:1;overflow:hidden;isolation:isolate;
+    transition:transform .35s var(--ease), box-shadow .35s var(--ease), border-color .25s var(--ease);
   }
-  .gisa .step:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+  .gisa .step::before{
+    content:"";position:absolute;inset:0;z-index:-1;opacity:0;
+    background:radial-gradient(60% 80% at 50% 0%, rgba(210,172,103,.18), transparent 70%);
+    transition:opacity .4s var(--ease);
+  }
+  .gisa .step::after{
+    content:"";position:absolute;left:0;right:0;top:0;height:3px;
+    background:linear-gradient(90deg, var(--accent), var(--petroleo-light));
+    transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease);
+  }
+  .gisa .step:hover{transform:translateY(-5px);box-shadow:0 25px 45px -22px rgba(9,30,45,.25);border-color:var(--accent)}
+  .gisa .step:hover::before{opacity:1}
+  .gisa .step:hover::after{transform:scaleX(1)}
   .gisa .step .badge{
     display:inline-flex;align-items:center;justify-content:center;
     width:56px;height:56px;border-radius:999px;
     background:linear-gradient(135deg,var(--accent),var(--accent-dark));color:#091E2D;
     font-weight:800;font-size:20px;letter-spacing:-.03em;
     box-shadow:0 8px 20px -8px rgba(184,149,86,.6);
+    transition:transform .4s var(--ease);
   }
+  .gisa .step:hover .badge{transform:rotate(-6deg) scale(1.05)}
   .gisa .step h3{margin-top:18px;font-size:19px}
   .gisa .step p{margin-top:10px;color:var(--text-muted);font-size:15px;line-height:1.6}
 
+  .gisa .transf{
+    background:
+      radial-gradient(50% 50% at 100% 0%, rgba(210,172,103,.07), transparent 70%),
+      radial-gradient(50% 50% at 0% 100%, rgba(19,110,138,.07), transparent 70%);
+  }
   .gisa .transf .head{max-width:780px;margin-bottom:48px}
   .gisa .transf h2{margin-top:14px}
   .gisa .transf-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:stretch}
@@ -320,17 +421,28 @@ const STYLES = `
   .gisa .tcol{
     padding:32px 26px;border-radius:var(--radius-lg);position:relative;
     display:flex;flex-direction:column;gap:18px;
+    transition:transform .35s var(--ease), box-shadow .35s var(--ease);
   }
+  .gisa .tcol:hover{transform:translateY(-4px)}
   .gisa .tcol .tag{
     font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:800;
     display:inline-flex;align-items:center;gap:8px;
   }
   .gisa .tcol p{font-size:15.5px;line-height:1.65}
-  .gisa .tcol.antes{background:#F4F1EA;color:var(--text-muted);border:1px solid var(--border-strong)}
+  .gisa .tcol.antes{
+    background:linear-gradient(180deg,#F6F2E8,#EFEAD9);color:var(--text-muted);
+    border:1px solid #D8CFB8;box-shadow:inset 0 1px 0 rgba(255,255,255,.6);
+  }
   .gisa .tcol.antes .tag{color:#8A7B5C}
-  .gisa .tcol.ponte{background:#fff;border:1px solid var(--border);color:var(--text)}
+  .gisa .tcol.ponte{
+    background:linear-gradient(180deg,#fff,#FAF8F2);border:1px solid var(--accent);
+    color:var(--text);box-shadow:0 18px 40px -22px rgba(184,149,86,.45);
+  }
   .gisa .tcol.ponte .tag{color:var(--accent-dark)}
-  .gisa .tcol.depois{background:linear-gradient(170deg,var(--petroleo-dark),var(--bg-dark));color:#fff;border:1px solid var(--surface-dark)}
+  .gisa .tcol.depois{
+    background:linear-gradient(170deg,var(--petroleo),var(--bg-dark));color:#fff;
+    border:1px solid rgba(210,172,103,.35);box-shadow:0 20px 50px -20px rgba(19,110,138,.55);
+  }
   .gisa .tcol.depois .tag{color:var(--accent)}
   .gisa .tcol.depois p{color:var(--text-on-dark)}
   .gisa .tcol .arrow{position:absolute;top:50%;right:-20px;transform:translateY(-50%);z-index:2;color:var(--accent)}
@@ -471,8 +583,8 @@ const BODY_HTML = `
   <div class="container hero-grid">
     <div class="hero-text">
       <span class="eyebrow">Facilities no Rio de Janeiro</span>
-      <h1>Portaria, limpeza, controle de acesso e vigia da sua operação sob uma única cultura de segurança.</h1>
-      <p class="lead">Mais de 30 anos no setor de facilities, atendendo condomínios residenciais e operações corporativas no Rio de Janeiro.</p>
+      <h1>Portaria, limpeza, controle de acesso e vigia da sua operação sob uma <span class="hl">única cultura de segurança</span>.</h1>
+      <p class="lead"><span class="hl-gold">Mais de 30 anos</span> no setor de facilities, atendendo condomínios residenciais e operações corporativas no <span class="hl-gold">Rio de Janeiro</span>.</p>
       <div class="cta-row">
         <a href="#form" class="btn btn-primary btn-lg">Quero uma avaliação gratuita
           <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -541,7 +653,7 @@ const BODY_HTML = `
 <section class="diag">
   <div class="container">
     <div class="head">
-      <h2>Você comanda o dia a dia ou apaga incêndio em todos eles?</h2>
+      <h2>Você <span class="hl">comanda o dia a dia</span> ou <span class="hl-red">apaga incêndio</span> em todos eles?</h2>
       <p class="lead sub">Cada frente atende por um contato diferente, um padrão diferente. Funciona enquanto você está em cima. Quando você precisa cuidar de outra coisa, alguma frente afrouxa.</p>
     </div>
     <p class="subhead">Cenas que provavelmente já apareceram na sua operação</p>
@@ -566,29 +678,49 @@ const BODY_HTML = `
   <div class="container">
     <div class="head">
       <span class="eyebrow">Serviços</span>
-      <h2>Como a Gisa atua no seu prédio</h2>
+      <h2>Como a Gisa <span class="hl">atua no seu prédio</span></h2>
       <p class="lead sub">Uma só cultura de operação aplicada a cada frente, em cada turno, em todo o prédio.</p>
     </div>
     <div class="cards-4">
       <article class="svc">
-        <span class="ico"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 4 4 6v15h6v-6h4v6h6V10"/><path d="M13 4v17"/><circle cx="11" cy="12" r=".8" fill="currentColor"/></svg></span>
-        <h3>Portaria e recepção</h3>
-        <p>Identificam, autorizam e registram a entrada de moradores, visitantes, prestadores e fornecedores. Gerenciam o fluxo do prédio, recebem encomendas e são o primeiro ponto de contato de quem chega.</p>
+        <div class="photo">
+          <img src="${svcPortariaImg}" alt="Porteiro Gisa em frente a portaria de condomínio" loading="lazy" width="800" height="600" />
+          <span class="ico"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 4 4 6v15h6v-6h4v6h6V10"/><path d="M13 4v17"/><circle cx="11" cy="12" r=".8" fill="currentColor"/></svg></span>
+        </div>
+        <div class="body">
+          <h3>Portaria e recepção</h3>
+          <p>Identificam, autorizam e registram a entrada de moradores, visitantes, prestadores e fornecedores. Gerenciam o fluxo do prédio, recebem encomendas e são o primeiro ponto de contato de quem chega.</p>
+        </div>
       </article>
       <article class="svc">
-        <span class="ico"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/></svg></span>
-        <h3>Limpeza</h3>
-        <p>Conservação e higienização das áreas comuns com rotina adaptada a cada tipo de espaço. Procedimentos definidos por frequência, tipo de superfície e perfil de uso do ambiente.</p>
+        <div class="photo">
+          <img src="${svcLimpezaImg}" alt="Equipe de limpeza Gisa em frente a condomínio" loading="lazy" width="800" height="600" />
+          <span class="ico"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/></svg></span>
+        </div>
+        <div class="body">
+          <h3>Limpeza</h3>
+          <p>Conservação e higienização das áreas comuns com rotina adaptada a cada tipo de espaço. Procedimentos definidos por frequência, tipo de superfície e perfil de uso do ambiente.</p>
+        </div>
       </article>
       <article class="svc">
-        <span class="ico"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 12h10"/></svg></span>
-        <h3>Controle de acesso</h3>
-        <p>Monitoramento e gestão dos pontos críticos de entrada: garagem, área de carga, serviços e perímetro externo. Cada acesso opera com procedimento próprio, por turno e perfil de entrada.</p>
+        <div class="photo">
+          <img src="${svcControleImg}" alt="Profissional Gisa em controle de acesso com rádio" loading="lazy" width="800" height="600" />
+          <span class="ico"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 12h10"/></svg></span>
+        </div>
+        <div class="body">
+          <h3>Controle de acesso</h3>
+          <p>Monitoramento e gestão dos pontos críticos de entrada: garagem, área de carga, serviços e perímetro externo. Cada acesso opera com procedimento próprio, por turno e perfil de entrada.</p>
+        </div>
       </article>
       <article class="svc">
-        <span class="ico"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16a2 2 0 1 0 4 0c0-1-.5-1.8-1-3l-1-3a2 2 0 1 1 4 0v6M14 16a2 2 0 1 0 4 0c0-1-.5-1.8-1-3l-1-3a2 2 0 1 1 4 0v6"/></svg></span>
-        <h3>Vigia</h3>
-        <p>Proteção patrimonial por meio de rondas programadas e presença ativa no perímetro. Profissionais treinados para observar, registrar e acionar quando necessário.</p>
+        <div class="photo">
+          <img src="${svcVigiaImg}" alt="Vigia Gisa fazendo registro de ronda" loading="lazy" width="800" height="600" />
+          <span class="ico"><svg class="i i-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16a2 2 0 1 0 4 0c0-1-.5-1.8-1-3l-1-3a2 2 0 1 1 4 0v6M14 16a2 2 0 1 0 4 0c0-1-.5-1.8-1-3l-1-3a2 2 0 1 1 4 0v6"/></svg></span>
+        </div>
+        <div class="body">
+          <h3>Vigia</h3>
+          <p>Proteção patrimonial por meio de rondas programadas e presença ativa no perímetro. Profissionais treinados para observar, registrar e acionar quando necessário.</p>
+        </div>
       </article>
     </div>
     <div class="section-cta">
@@ -613,7 +745,7 @@ const BODY_HTML = `
       <p>A Gisa nasceu dessa trajetória consolidada e foi estruturada para tratar facilities como uma operação única, com cultura e supervisão consistentes.</p>
       <div class="sig"><span class="av" aria-hidden="true"></span><span>Lawrence Vale</span></div>
       <div class="cta-row">
-        <a href="#form" class="btn btn-primary">Falar com o Lawrence
+        <a href="https://wa.me/5521964628256" target="_blank" rel="noopener" class="btn btn-primary">Conversar pelo WhatsApp
           <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
       </div>
@@ -624,7 +756,7 @@ const BODY_HTML = `
 <section class="plano">
   <div class="container">
     <div class="head">
-      <h2>Como funciona o início da operação com a Gisa</h2>
+      <h2>Como funciona o <span class="hl">início da operação</span> com a Gisa</h2>
       <p class="lead sub">Três etapas, do diagnóstico inicial ao primeiro turno em funcionamento.</p>
     </div>
     <div class="steps">
@@ -655,7 +787,7 @@ const BODY_HTML = `
 <section class="transf">
   <div class="container">
     <div class="head">
-      <h2>O que muda na sua rotina quando a Gisa assume a operação</h2>
+      <h2>O que <span class="hl">muda na sua rotina</span> quando a Gisa assume a operação</h2>
     </div>
     <div class="transf-grid">
       <div class="tcol antes">
@@ -685,8 +817,8 @@ const BODY_HTML = `
   <div class="container cta-grid">
     <div class="cta-text">
       <span class="eyebrow">Avaliação gratuita</span>
-      <h2>Sua operação merece um padrão único. Comece pela avaliação gratuita.</h2>
-      <p class="sub">Preencha ao lado. Em até 1 dia útil, nossa equipe entra em contato pelo WhatsApp para agendar a visita.</p>
+      <h2>Sua operação merece um <span class="hl-gold">padrão único</span>. Comece pela avaliação gratuita.</h2>
+      <p class="sub">Preencha o formulário e a nossa equipe entrará em contato o quanto antes pelo WhatsApp para agendar a visita.</p>
       <ul class="cta-bullets">
         <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Visita ao local, sem custo</li>
         <li><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Diagnóstico escrito dos pontos críticos</li>
